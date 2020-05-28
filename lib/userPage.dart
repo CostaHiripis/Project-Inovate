@@ -64,14 +64,18 @@ class _userPageState extends State<userPage> {
 //                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      child: Text('Teacher/ \n Student',style: TextStyle(color: Colors.white, fontSize: 17)),
+                      child: Text('Teacher/ \n Student',
+                          style: TextStyle(color: Colors.white, fontSize: 17)),
                     ),
                     Container(
-
                       margin: const EdgeInsets.fromLTRB(45, 0, 0, 0),
 //                        color:Colors.amber,
                       child: Text('Student',
-                          style: TextStyle(color: Colors.white, fontSize: 22,fontWeight: FontWeight.bold,)),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
                   ],
                 )),
