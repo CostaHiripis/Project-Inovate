@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TestPage extends StatefulWidget {
+  // final Function toggleView;
+  // TestPage({this.toggleView});
+
   @override
   _TestPageState createState() => _TestPageState();
 }
@@ -13,7 +16,7 @@ class _TestPageState extends State<TestPage> {
         title: Text("Yo what's good homie :)"),
       ),
       body:
-      Text("This is just an empty page for now, nothing special... yet ;)"),
+          Text("This is just an empty page for now, nothing special... yet ;)"),
     );
   }
 }
