@@ -1,6 +1,6 @@
-// import 'package:CheckOff/UI/CustomInputField.dart';
 import 'package:CheckOff/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'registerBuffer.dart';
 
 class registerScreen extends StatefulWidget {
   @override
@@ -184,8 +184,12 @@ class _registerScreenState extends State<registerScreen> {
                         if (_formKey.currentState.validate()) {
                           dynamic result = await _auth
                               .registerWithEmailAndPassword(email, password);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => registerBuffer()),
+                          );
                           if (result == null) {
-                            setState(() => error = 'supply valid email');
+                            setState(() => error = 'Enter valid email');
                           }
                         }
                         ;
