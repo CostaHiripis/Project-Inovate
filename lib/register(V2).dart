@@ -190,7 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => RegisterBuffer()),
+                                builder: (context) => registerBuffer()),
                           );
                           if (result == null) {
                             setState(() => error = 'Enter valid email');
