@@ -1,6 +1,7 @@
 import 'package:CheckOff/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'register(V2).dart';
+
 class loginScreen extends StatefulWidget {
   @override
   _loginScreenState createState() => _loginScreenState();
@@ -59,7 +60,7 @@ class _loginScreenState extends State<loginScreen> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: TextFormField(
                                       validator: (val) =>
-                                      val.isEmpty ? 'Enter an email' : null,
+                                          val.isEmpty ? 'Enter an email' : null,
                                       onChanged: (val) {
                                         setState(() {
                                           email = val;
@@ -136,13 +137,14 @@ class _loginScreenState extends State<loginScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => registerScreen()),
+                              builder: (context) => RegisterScreen()),
                         );
                       },
                       color: Colors.cyan,
                       textColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
                       child: Text(
                         "Register",
                         style: TextStyle(fontSize: 20.0),
@@ -159,7 +161,7 @@ class _loginScreenState extends State<loginScreen> {
                       textColor: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius:
-                          BorderRadius.all(Radius.circular(10.0))),
+                              BorderRadius.all(Radius.circular(10.0))),
                       child: Text(
                         "Login",
                         style: TextStyle(fontSize: 20.0),

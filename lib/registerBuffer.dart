@@ -6,26 +6,28 @@ import 'services/auth.dart';
 import 'services/database.dart';
 import 'package:flutter/material.dart';
 
-class registerBuffer extends StatelessWidget {
+class RegisterBuffer extends StatelessWidget {
   @override
-
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 3), () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => loginScreen()),
-      );
-    });
+    // Timer(Duration(seconds: 3), () {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => LoginScreen()),
+    //   );
+    // });
     return Scaffold(
         body: Container(
-        child:Text(
-          'You have successfully registerd',
-          textAlign: TextAlign.center,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontWeight: FontWeight.bold),
-        )
-      )
-    );
-
+            child: Text(
+      'You have successfully registerd',
+      textAlign: TextAlign.center,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(fontWeight: FontWeight.bold),
+    )));
   }
 }
+// child: Text(
+//   'You have successfully registerd',
+//   textAlign: TextAlign.center,
+//   overflow: TextOverflow.ellipsis,
+//   style: TextStyle(fontWeight: FontWeight.bold),
+// )
