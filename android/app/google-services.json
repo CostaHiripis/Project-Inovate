@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "355262597008",
+    "firebase_url": "https://project-innovate-4bca9.firebaseio.com",
+    "project_id": "project-innovate-4bca9",
+    "storage_bucket": "project-innovate-4bca9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:355262597008:android:92e6332cad90e971721515",
+        "android_client_info": {
+          "package_name": "com.groupIT1B.CheckOff"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "355262597008-lpb3249lpc46c04g5mrkpnbdi5ojejv8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsPwBUT0fT_KTWNnOJ3XVW1p9zRR19wcc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "355262597008-lpb3249lpc46c04g5mrkpnbdi5ojejv8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

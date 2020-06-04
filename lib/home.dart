@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'calendarpage.dart';
 import 'timerpage.dart';
 import 'testpage.dart';
+import 'register(V2).dart';
 
 //This is the root container for the entire screen, it accepts StfWidg
 class MainScreen extends StatefulWidget {
@@ -30,6 +31,7 @@ class _MainScreenState extends State<MainScreen> {
     _pageController.dispose();
     super.dispose();
   }
+
 //Push test
   @override
   Widget build(BuildContext context) {
@@ -48,6 +50,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
           CalendarPage(),
+          registerScreen(),
           Container(
               child: Center(
             child: TimerPage(),

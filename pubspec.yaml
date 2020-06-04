@@ -33,6 +33,8 @@ dependencies:
   shared_preferences: 0.5.4+5
   device_calendar: ^3.1.0
   flutter_timer: ^0.0.6
+  firebase_auth: ^0.16.1
+  cloud_firestore: ^0.13.6
 
 dev_dependencies:
   flutter_test:

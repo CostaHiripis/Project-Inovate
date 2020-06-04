@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 
-class CustomInputField extends StatelessWidget{
-  
+class CustomInputField extends StatelessWidget {
   Icon fieldIcon;
   String hintText;
   bool obscureText;
   String _fieldValue;
 
+  CustomInputField(this.fieldIcon, this.hintText, this.obscureText);
 
-  CustomInputField(this.fieldIcon,this.hintText,this.obscureText);
-  
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -26,7 +24,9 @@ class CustomInputField extends StatelessWidget{
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.only(topRight: Radius.circular(10.0),bottomRight: Radius.circular(10.0)),
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(10.0),
+                    bottomRight: Radius.circular(10.0)),
               ),
               width: 275,
               height: 60,
@@ -44,8 +44,7 @@ class CustomInputField extends StatelessWidget{
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.black,
-                    )
-                ),
+                    )),
               ),
             ),
           ],
