@@ -1,68 +1,141 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_timer/flutter_timer.dart';
 
 class TimerPage extends StatefulWidget {
   @override
   _TimerPageState createState() => _TimerPageState();
 }
-
 class _TimerPageState extends State<TimerPage> {
-  bool running = false;
+
+bool isVisible = false;
+bool running = false;
+String buttonStartStopResume = "Start";
+String stopTimeToDisplay = "00:00:00";
+var sWatch = Stopwatch();
+final dur = const Duration(seconds: 1);
+
+void startTimer()
+{
+  Timer(dur, keepRunning);
+}
+
+void keepRunning()
+{
+  if(sWatch.isRunning)
+  {
+    startTimer();
+  }
+  setState(() {
+     stopTimeToDisplay = sWatch.elapsed.inHours.toString().padLeft(2, "0") + ":" + 
+  (sWatch.elapsed.inMinutes%60).toString().padLeft(2, "0") + ":" + 
+  (sWatch.elapsed.inSeconds%60).toString().padLeft(2, "0");
+  });
+ 
+}
+
+void startStopwatch()
+{
+  sWatch.start();
+  startTimer();
+}
+
+void stopStopwatch()
+{
+  sWatch.stop();
+}
+
+void resetStopwatch()
+{
+  sWatch.reset();
+  stopTimeToDisplay = "00:00:00";
+}
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TikTikTimer(
-              initialDate: DateTime.now(),
-              running: running,
-              height: 150,
-              width: 150,
-              backgroundColor: Colors.indigo,
-              timerTextStyle: TextStyle(color: Colors.white, fontSize: 20),
-              borderRadius: 100,
-              isRaised: true,
-              tracetime: (time) {
-              },
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                RaisedButton(
-                  child: Text(
-                    'Start',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  color: Colors.green,
-                  onPressed: () {
-                    try {
-                      if (running == false)
-                        setState(() {
-                          running = true;
-                        });
-                    } on Exception {}
-                  },
+            Expanded(
+              flex: 6,
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  stopTimeToDisplay,
+                  style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.w700),
                 ),
-                RaisedButton(
-                  child: Text(
-                    'Stop',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  color: Colors.red,
-                  onPressed: () {
-                    if (running == true)
-                      setState(() {
-                        running = false;
-                      });
-                  },
-                )
-              ],
-            )
+              ),
+            ),
+            Expanded(
+              flex: 4,
+              child: Container(
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        RaisedButton(
+                          child: Text(
+                            '$buttonStartStopResume',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          color: running ? Colors.red : Colors.green,
+                          onPressed: () {
+                            try {
+                              if (running == false && buttonStartStopResume == "Start") {
+                                setState(() {
+                                  running = true;
+                                  buttonStartStopResume = "Stop";
+                                  startStopwatch();
+                                });
+                              } else if (running == true && buttonStartStopResume == "Stop") {
+                                setState(() {
+                                  running = false;
+                                  buttonStartStopResume = "Resume";
+                                  stopStopwatch();
+                                  isVisible = true;
+                                });
+                              } else if (running == false && buttonStartStopResume == "Resume") {
+                                setState(() {
+                                  running = true;
+                                  buttonStartStopResume = "Stop";
+                                  startStopwatch();
+                                });
+                              }
+                            } on Exception {}
+                          },
+                        ),
+                        Visibility(
+                          visible: isVisible,
+                          child: 
+                        RaisedButton(
+                          child: Text(
+                            'Reset',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          color: Colors.blue,
+                          onPressed: () {
+                            try {
+                              if (running == false && buttonStartStopResume == "Resume") {
+                                setState(() {
+                                  running = false;
+                                  buttonStartStopResume = "Start";
+                                  resetStopwatch();
+                                });
+                              }
+                            } on Exception {}
+                          },
+                        ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
