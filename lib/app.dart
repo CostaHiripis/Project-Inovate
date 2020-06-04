@@ -19,6 +19,6 @@ class App extends StatelessWidget {
         ),
         //These are properties for the MaterialApp class
         //This is the homescreen, scafold is used as a base for the app blocks
-        home: RegisterBuffer());
+        home: MainScreen());
   }
 }

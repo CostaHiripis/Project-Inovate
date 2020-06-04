@@ -1,20 +1,23 @@
 import 'package:CheckOff/services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'home.dart';
 import 'register(V2).dart';
+import 'services/auth.dart';
 
-class loginScreen extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
   @override
-  _loginScreenState createState() => _loginScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _loginScreenState extends State<loginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   String email = '';
   String password = '';
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   String error = '';
-
+  var authHandler = new Auth();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,8 +157,16 @@ class _loginScreenState extends State<loginScreen> {
                   Container(
                     // color: Colors.black,
                     child: RaisedButton(
-                      onPressed: () async {
+                      onPressed: () {
                         //---------\\LOGIN CODE HERE\\----------
+                        authHandler
+                            .handleSignInEmail(email, password)
+                            .then((FirebaseUser user) {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => new MainScreen()));
+                        }).catchError((e) => print(e));
                       },
                       color: Colors.cyan,
                       textColor: Colors.white,
