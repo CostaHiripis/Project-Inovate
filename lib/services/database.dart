@@ -8,10 +8,13 @@ class DatabaseService {
   final CollectionReference studentsCollection =
       Firestore.instance.collection('students');
 
-  Future updateStudentData(
-      String email, String userName, String password) async {
-    return await studentsCollection
-        .document(uid)
-        .setData({'email': email, 'userName': userName, 'password': password});
+  Future<void> updateStudentData(
+      String email, String userName, String password, int authority) async {
+    return await studentsCollection.document(uid).setData({
+      'email': email,
+      'userName': userName,
+      'password': password,
+      'authority': authority
+    });
   }
 }

@@ -20,16 +20,16 @@ class AuthService {
   }
 
   // sign in anon
-  // Future signInAnon() async {
-  //   try {
-  //     AuthResult result = await _auth.signInAnonymously();
-  //     FirebaseUser user = result.user;
-  //     return 'chuujjjfiwaojnfoiawnoifawnhoiufbnhawuibfas';
-  //   } catch (e) {
-  //     print(e.toString());
-  //     return null;
-  //   }
-  // }
+  Future signInAnon() async {
+    try {
+      AuthResult result = await _auth.signInAnonymously();
+      FirebaseUser user = result.user;
+      return 'chuujjjfiwaojnfoiawnoifawnhoiufbnhawuibfas';
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
   // sign in with email and password
 
@@ -42,7 +42,7 @@ class AuthService {
 
       //create a new document for the user with the uid
       await DatabaseService(uid: user.uid)
-          .updateStudentData(email, 'Briki', password);
+          .updateStudentData(email, 'Briki', password, 1);
 
       return _userFromFirebaseUser(user);
     } catch (err) {
@@ -50,7 +50,6 @@ class AuthService {
       return null;
     }
   }
-
   // sign out
   Future signOut() async {
     try {
@@ -59,5 +58,25 @@ class AuthService {
       print(error.toString());
       return null;
     }
+  }
+}
+class Auth {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
+  Future<FirebaseUser> handleSignInEmail(String email, String password) async {
+
+    AuthResult result = await auth.signInWithEmailAndPassword(email: email, password: password);
+    final FirebaseUser user = result.user;
+
+    assert(user != null);
+    assert(await user.getIdToken() != null);
+
+    final FirebaseUser currentUser = await auth.currentUser();
+    assert(user.uid == currentUser.uid);
+
+    print('signInEmail succeeded: $user');
+
+    return user;
+
   }
 }
