@@ -122,6 +122,7 @@ void resetStopwatch()
                                   running = false;
                                   buttonStartStopResume = "Start";
                                   resetStopwatch();
+                                  isVisible = false;
                                 });
                               }
                             } on Exception {}
