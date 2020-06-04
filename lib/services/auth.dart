@@ -20,16 +20,16 @@ class AuthService {
   }
 
   // sign in anon
-  // Future signInAnon() async {
-  //   try {
-  //     AuthResult result = await _auth.signInAnonymously();
-  //     FirebaseUser user = result.user;
-  //     return 'chuujjjfiwaojnfoiawnoifawnhoiufbnhawuibfas';
-  //   } catch (e) {
-  //     print(e.toString());
-  //     return null;
-  //   }
-  // }
+  Future signInAnon() async {
+    try {
+      AuthResult result = await _auth.signInAnonymously();
+      FirebaseUser user = result.user;
+      return 'chuujjjfiwaojnfoiawnoifawnhoiufbnhawuibfas';
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
   // sign in with email and password
 

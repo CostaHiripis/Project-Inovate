@@ -50,7 +50,6 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
           CalendarPage(),
-          registerScreen(),
           Container(
               child: Center(
             child: TimerPage(),

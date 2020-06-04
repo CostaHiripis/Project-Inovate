@@ -2,12 +2,15 @@ import 'package:CheckOff/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'registerBuffer.dart';
 
-class registerScreen extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
+  // final Function toggleView;
+  // RegisterScreen({this.toggleView});
+
   @override
-  _registerScreenState createState() => _registerScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _registerScreenState extends State<registerScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   String email = '';
   String userName = '';
   String password = '';
