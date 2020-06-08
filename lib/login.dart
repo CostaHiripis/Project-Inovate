@@ -2,7 +2,7 @@ import 'package:CheckOff/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'home.dart';
-import 'register(V2).dart';
+import 'register.dart';
 import 'services/auth.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -35,11 +35,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    // width: 400,
-                    // height: 400,
-                    // color: Colors.red,
                     child: Column(
                       children: [
+                        Image.asset("images/logoBlue.png",height: 200,width: 200,),
                         Padding(
                           padding: EdgeInsets.fromLTRB(30, 10, 20, 0),
                           child: Row(
@@ -52,11 +50,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(10.0),
-                                      bottomRight: Radius.circular(10.0)),
-                                ),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(Radius.circular(10.0))),
                                 width: 275,
                                 height: 60,
                                 child: Padding(
@@ -96,10 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Container(
                                 decoration: BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(10.0),
-                                      bottomRight: Radius.circular(10.0)),
-                                ),
+                                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
                                 width: 275,
                                 height: 60,
                                 child: Padding(
@@ -134,50 +126,53 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
-                  Container(
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RegisterScreen()),
-                        );
-                      },
-                      color: Colors.cyan,
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
-                      child: Text(
-                        "Register",
-                        style: TextStyle(fontSize: 20.0),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    // color: Colors.black,
-                    child: RaisedButton(
-                      onPressed: () {
-                        //---------\\LOGIN CODE HERE\\----------
-                        authHandler
-                            .handleSignInEmail(email, password)
-                            .then((FirebaseUser user) {
-                          Navigator.push(
+                  Row( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        child: RaisedButton(
+                          onPressed: () {
+                            Navigator.push(
                               context,
-                              new MaterialPageRoute(
-                                  builder: (context) => new MainScreen()));
-                        }).catchError((e) => print(e));
-                      },
-                      color: Colors.cyan,
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
-                      child: Text(
-                        "Login",
-                        style: TextStyle(fontSize: 20.0),
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterScreen()),
+                            );
+                          },
+                          color: Colors.cyan,
+                          textColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0))),
+                          child: Text(
+                            "Register",
+                            style: TextStyle(fontSize: 25.0),
+                          ),
+                        ),
                       ),
-                    ),
+                      Container(
+                        child: RaisedButton(
+                          onPressed: () {
+                            //---------\\LOGIN CODE HERE\\----------
+                            authHandler
+                                .handleSignInEmail(email, password)
+                                .then((FirebaseUser user) {
+                              Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => new MainScreen()));
+                            }).catchError((e) => print(e));
+                          },
+                          color: Colors.cyan,
+                          textColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0))),
+                          child: Text(
+                            "Login",
+                            style: TextStyle(fontSize: 25.0),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

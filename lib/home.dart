@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'calendarpage.dart';
 import 'timerpage.dart';
 import 'testpage.dart';
-import 'register(V2).dart';
+import 'register.dart';
 
 //This is the root container for the entire screen, it accepts StfWidg
 class MainScreen extends StatefulWidget {
