@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                     child: Column(
                       children: [
-                        Image.asset("images/logoBlue.png",height: 200,width: 200,),
+                        Image.asset("images/logoBlue.png",height: 170,width: 170,),
                         Padding(
                           padding: EdgeInsets.fromLTRB(30, 10, 20, 0),
                           child: Row(
