@@ -6,7 +6,44 @@ class TimerPage extends StatefulWidget {
   _TimerPageState createState() => _TimerPageState();
 }
 
-class _TimerPageState extends State<TimerPage> {
+class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver{
+
+  void initState()
+  {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  void dispose()
+  {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  void didChangeAppLifecycleState(AppLifecycleState state)
+  {
+    super.didChangeAppLifecycleState(state); 
+    switch(state)
+    {
+      case AppLifecycleState.paused:
+      keepRunning();
+      break;
+
+      case AppLifecycleState.resumed:
+      keepRunning();
+      break;
+
+      case AppLifecycleState.inactive:
+      keepRunning();
+      break;
+
+      case AppLifecycleState.detached:
+      keepRunning();
+      break;
+
+    }
+  }
+
   bool isVisible = false;
   bool running = false;
   String buttonStartStopResume = "Start";
@@ -34,7 +71,7 @@ class _TimerPageState extends State<TimerPage> {
   void startStopwatch() {
     sWatch.start();
     startTimer();
-    setState(() {
+    setState(() { 
       running = true;
       buttonStartStopResume = "Stop";
     });

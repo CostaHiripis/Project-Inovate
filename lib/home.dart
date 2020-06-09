@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'calendarpage.dart';
 import 'timerpage.dart';
 import 'testpage.dart';
-import 'register.dart';
 
 //This is the root container for the entire screen, it accepts StfWidg
 class MainScreen extends StatefulWidget {
@@ -14,6 +13,7 @@ class MainScreen extends StatefulWidget {
 
 //This is the class in which you can initialize widgets
 class _MainScreenState extends State<MainScreen> {
+  
   //List of pages to be displayed in a swipeable manner
   List<Widget> pages = [CalendarPage(), TimerPage(), TestPage()];
   PageController _pageController;
