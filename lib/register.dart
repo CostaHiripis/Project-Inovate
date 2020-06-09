@@ -1,6 +1,7 @@
 import 'package:CheckOff/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'registerBuffer.dart';
+import 'login.dart';
 
 class RegisterScreen extends StatefulWidget {
   // final Function toggleView;
@@ -193,6 +194,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         "Register",
                         style: TextStyle(fontSize: 25.0),
                       ),
+                    ),
+                  ),
+                  Container(
+                    // color: Colors.black,
+                    child: RaisedButton(
+                      onPressed: () {
+                        Navigator.push(context, new MaterialPageRoute(
+                                     builder: (context) => new LoginScreen()));},
+                      color: Colors.cyan,
+                      textColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(10.0))),
+                      child: Icon(Icons.arrow_back_ios, color: Colors.white70, size: 30),
                     ),
                   ),
                 ],
