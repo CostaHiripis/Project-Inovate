@@ -1,8 +1,10 @@
 import 'package:CheckOff/login.dart';
+import 'package:CheckOff/register.dart';
 import 'package:CheckOff/registerBuffer.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'home.dart';
+import 'login.dart';
 
 class App extends StatelessWidget {
   @override
@@ -19,6 +21,6 @@ class App extends StatelessWidget {
         ),
         //These are properties for the MaterialApp class
         //This is the homescreen, scafold is used as a base for the app blocks
-        home: MainScreen());
+        home: LoginScreen());
   }
 }
