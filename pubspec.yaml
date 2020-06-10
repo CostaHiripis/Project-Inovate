@@ -35,7 +35,9 @@ dependencies:
   flutter_timer: ^0.0.6
   firebase_auth: ^0.16.1
   cloud_firestore: ^0.13.6
-  password: ^1.0.0
+  flutter_secure_storage: ^3.3.3
+  crypto: ^2.1.4
+  smooth_star_rating: ^1.1.1
 
 dev_dependencies:
   flutter_test:

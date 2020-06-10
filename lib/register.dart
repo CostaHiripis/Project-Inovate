@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:CheckOff/services/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:password/password.dart';
 import 'registerBuffer.dart';
 import 'login.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:crypto/crypto.dart';
 
 class RegisterScreen extends StatefulWidget {
   // final Function toggleView;
@@ -17,6 +20,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String userName = '';
   String password = '';
 
+  final storage = new FlutterSecureStorage();
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   String error = '';
@@ -176,10 +180,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: RaisedButton(
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-                          var hash = Password.hash(password, new PBKDF2());
                           dynamic result =
                               await _auth.registerWithEmailAndPassword(
-                                  email, userName, hash);
+                                  email, userName, password);
                           Navigator.push(
                             context,
                             MaterialPageRoute(

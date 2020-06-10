@@ -17,4 +17,13 @@ class DatabaseService {
       'authority': authority
     });
   }
+
+  Future<void> getUserAccount(String email, String password) async {
+    // return await studentsCollection.document(uid).get().then((value) => null);
+    return await studentsCollection
+        .where("email", isEqualTo: email)
+        .where("password", isEqualTo: password)
+        .snapshots()
+        .listen((data) => data.documents.forEach((doc) => print(doc["title"])));
+  }
 }
