@@ -6,7 +6,7 @@ class DatabaseService {
 
   //collection reference
   final CollectionReference studentsCollection =
-      Firestore.instance.collection('students');
+      Firestore.instance.collection('users');
 
   Future<void> updateStudentData(
       String email, String userName, String password, int authority) async {

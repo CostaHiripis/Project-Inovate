@@ -13,13 +13,30 @@ class registerBuffer extends StatelessWidget {
       );
     });
     return Scaffold(
-        body: Container(
-            child: Text(
-      'You have successfully registerd',
-      textAlign: TextAlign.center,
-      overflow: TextOverflow.ellipsis,
-      style: TextStyle(fontWeight: FontWeight.bold),
-    )));
+        backgroundColor: Colors.blue,
+        body: Column(
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Center(
+              child: Container(
+                // color: Colors.red,
+                child: Text(
+                  "Register was successfull",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                  ),
+                ),
+              ),
+            ),
+            Icon(
+              Icons.done,
+              color: Colors.white,
+              size: 80,
+            )
+          ],
+        ));
   }
 }
 // child: Text(
