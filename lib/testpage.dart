@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -12,26 +13,57 @@ class TestPage extends StatefulWidget {
 
 class _TestPageState extends State<TestPage> {
 
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-  var initializationSettingsAndroid;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  AndroidInitializationSettings androidInitializationSettings;
+  IOSInitializationSettings iosInitializationSettings;
+  InitializationSettings initializationSettings;
 
-  void showNotification() async{
+
+  void showNotification()async {
     await notification();
   }
 
-Future<void> notification() async{
-  var androidPlatformChannelSpesifics = AndroidNotificationDetails("channel_ID", "channel name", "channel description", importance: Importance.Max, priority: Priority.High, ticker: "test ticker");
-  var iOSChannelSpecifics = IOSNotificationDetails();
-  var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpesifics, iOSChannelSpecifics);
-  
-  await flutterLocalNotificationsPlugin.show(0, "hello", "test", platformChannelSpecifics, payload: "test");
+Future<void> notification()async {
+
+AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('Channel_ID', 'Channel title', 'Channel body', importance: Importance.Max, priority: Priority.High, ticker: "test ticker");
+IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
+NotificationDetails notificationDetails = NotificationDetails(androidNotificationDetails, iosNotificationDetails);
+await flutterLocalNotificationsPlugin.show(0, 'Hello there', "my dude", notificationDetails);
 }
 
   @override
   void initState()
   {
     super.initState();
-    initializationSettingsAndroid = new AndroidInitializationSettings("app_icon");
+    initializing();
+  }
+
+  void initializing()async {
+    androidInitializationSettings = AndroidInitializationSettings("app_icon");
+    iosInitializationSettings = IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    initializationSettings = InitializationSettings(androidInitializationSettings, iosInitializationSettings);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
+  }
+
+  Future onSelectNotification(String payLoad){
+    if(payLoad!=null){
+      print(payLoad);
+    }
+  }
+
+  Future onDidReceiveLocalNotification(int id, String title, String body, String payload) async{
+    return CupertinoAlertDialog(
+      title: Text(title),
+      content: Text(body),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          isDefaultAction: true,
+          onPressed: () {
+            print("");
+          },
+          child: Text("ok"),)
+      ],
+    );
   }
 
   @override
