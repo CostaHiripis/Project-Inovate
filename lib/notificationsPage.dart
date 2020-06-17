@@ -10,7 +10,7 @@ class TestPage extends StatefulWidget {
   @override
   _TestPageState createState() => _TestPageState();
 }
-
+var secondsTillNotification = 5;
 class _TestPageState extends State<TestPage> {
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -24,10 +24,11 @@ class _TestPageState extends State<TestPage> {
   }
 
 Future<void> notification()async {
-  AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('Channel_ID', 'Channel title', 'Channel body', importance: Importance.Max, priority: Priority.High, ticker: "test ticker");
+  var timeDelayed = DateTime.now().add(Duration(seconds: secondsTillNotification));
+  AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('Channel_ID', 'Channel title', 'channel body', priority: Priority.High, importance: Importance.Max, ticker: 'test');
   IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
   NotificationDetails notificationDetails = NotificationDetails(androidNotificationDetails, iosNotificationDetails);
-  await flutterLocalNotificationsPlugin.show(0, 'Hello there', "my dude", notificationDetails);
+  await flutterLocalNotificationsPlugin.schedule(0, 'test','Is it working', timeDelayed, notificationDetails);
 }
 
   @override
@@ -84,4 +85,3 @@ Future<void> notification()async {
     );
   }
 }
-//hentai
