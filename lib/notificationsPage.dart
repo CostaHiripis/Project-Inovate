@@ -69,11 +69,17 @@ await flutterLocalNotificationsPlugin.show(0, 'Hello there', "my dude", notifica
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-          Text("This is just an empty page for now, nothing special... yet ;)"),
-          floatingActionButton: new FloatingActionButton(
+      appBar: new AppBar(
+        title: new Text("Demo"),
+      ),
+      body: new Center(
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[],
+        ),
+      ),
+      floatingActionButton: new FloatingActionButton(
         onPressed: showNotification,
-        tooltip: 'Increment',
         child: new Icon(Icons.notifications),
       ),
     );

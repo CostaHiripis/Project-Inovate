@@ -88,23 +88,23 @@ class _CalendarPageState extends State<CalendarPage> {
                 centerHeaderTitle: true,
               ),
             ),
-            ..._finalEventList.map((event, description) => SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    children: <Widget>[
-                      Card(
-                          child: ListTile(
-                        onTap: () {},
-                        title: Text(event),
+            // ..._finalEventList.map((event, description) => SingleChildScrollView(
+            //       scrollDirection: Axis.vertical,
+            //       child: Column(
+            //         children: <Widget>[
+            //           Card(
+            //               child: ListTile(
+            //             onTap: () {},
+            //             title: Text(event),
                         
-                        subtitle: Text(event),
+            //             subtitle: Text(event),
                         
-                        leading: Icon(Icons.assignment_turned_in),
-                        trailing: Icon(Icons.more_vert),
-                      ))
-                    ],
-                  ),
-                ))
+            //             leading: Icon(Icons.assignment_turned_in),
+            //             trailing: Icon(Icons.more_vert),
+            //           ))
+            //         ],
+            //       ),
+            //     ))
           ],
         ),
       ),
