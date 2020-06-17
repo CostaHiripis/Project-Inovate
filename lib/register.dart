@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:CheckOff/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'registerBuffer.dart';
 import 'login.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:crypto/crypto.dart';
+import 'package:password/password.dart';
 
 class RegisterScreen extends StatefulWidget {
   // final Function toggleView;
@@ -16,6 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String userName = '';
   String password = '';
 
+  final storage = new FlutterSecureStorage();
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   String error = '';
@@ -49,8 +55,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               Container(
                                 decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))),
                                 width: 275,
                                 height: 60,
                                 child: Padding(
@@ -90,8 +97,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   color: Colors.white70, size: 40),
                               Container(
                                 decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))),
                                 width: 275,
                                 height: 60,
                                 child: Padding(
@@ -131,8 +139,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               Icon(Icons.lock, color: Colors.white70, size: 40),
                               Container(
                                 decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))),
                                 width: 275,
                                 height: 60,
                                 child: Padding(
@@ -172,8 +181,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: RaisedButton(
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-                          dynamic result = await _auth
-                              .registerWithEmailAndPassword(email, password);
+                          var hash = Password.hash(password, new PBKDF2());
+                          dynamic result =
+                              await _auth.registerWithEmailAndPassword(
+                                  email, userName, hash);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -200,14 +211,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     // color: Colors.black,
                     child: RaisedButton(
                       onPressed: () {
-                        Navigator.push(context, new MaterialPageRoute(
-                                     builder: (context) => new LoginScreen()));},
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => new LoginScreen()));
+                      },
                       color: Colors.cyan,
                       textColor: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius:
-                          BorderRadius.all(Radius.circular(10.0))),
-                      child: Icon(Icons.arrow_back_ios, color: Colors.white70, size: 30),
+                              BorderRadius.all(Radius.circular(10.0))),
+                      child: Icon(Icons.arrow_back_ios,
+                          color: Colors.white70, size: 30),
                     ),
                   ),
                 ],

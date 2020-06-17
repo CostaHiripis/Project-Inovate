@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'home.dart';
 import 'login.dart';
+import 'services/rating.dart';
 
 class App extends StatelessWidget {
   @override

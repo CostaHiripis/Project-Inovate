@@ -32,9 +32,20 @@ class AuthService {
   }
 
   // sign in with email and password
+  Future signIn(String email, String password) async {
+    try {
+      AuthResult result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      FirebaseUser user = result.user;
+      return _userFromFirebaseUser(user);
+
+      // await DatabaseService(uid: user.uid).getUserAccount(email, password);
+    } catch (err) {}
+  }
 
   // register with email and password
-  Future registerWithEmailAndPassword(String email, String password) async {
+  Future registerWithEmailAndPassword(
+      String email, String username, String password) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -42,7 +53,7 @@ class AuthService {
 
       //create a new document for the user with the uid
       await DatabaseService(uid: user.uid)
-          .updateStudentData(email, 'Briki', password, 1);
+          .updateStudentData(email, username, password, 1);
 
       return _userFromFirebaseUser(user);
     } catch (err) {
@@ -50,6 +61,7 @@ class AuthService {
       return null;
     }
   }
+
   // sign out
   Future signOut() async {
     try {
@@ -60,12 +72,13 @@ class AuthService {
     }
   }
 }
+
 class Auth {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   Future<FirebaseUser> handleSignInEmail(String email, String password) async {
-
-    AuthResult result = await auth.signInWithEmailAndPassword(email: email, password: password);
+    AuthResult result =
+        await auth.signInWithEmailAndPassword(email: email, password: password);
     final FirebaseUser user = result.user;
 
     assert(user != null);
@@ -77,6 +90,5 @@ class Auth {
     print('signInEmail succeeded: $user');
 
     return user;
-
   }
 }

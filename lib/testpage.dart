@@ -8,12 +8,22 @@ class TestPage extends StatefulWidget {
   _TestPageState createState() => _TestPageState();
 }
 
+void showNotification(){
+  
+}
+
 class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body:
-          Text("Reminders"),
+          Text("This is just an empty page for now, nothing special... yet ;)"),
+          floatingActionButton: new FloatingActionButton(
+        onPressed: showNotification,
+        tooltip: 'Increment',
+        child: new Icon(Icons.notifications),
+      ),
     );
   }
 }
+//hentai
