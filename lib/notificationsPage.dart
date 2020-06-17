@@ -24,11 +24,10 @@ class _TestPageState extends State<TestPage> {
   }
 
 Future<void> notification()async {
-
-AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('Channel_ID', 'Channel title', 'Channel body', importance: Importance.Max, priority: Priority.High, ticker: "test ticker");
-IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
-NotificationDetails notificationDetails = NotificationDetails(androidNotificationDetails, iosNotificationDetails);
-await flutterLocalNotificationsPlugin.show(0, 'Hello there', "my dude", notificationDetails);
+  AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('Channel_ID', 'Channel title', 'Channel body', importance: Importance.Max, priority: Priority.High, ticker: "test ticker");
+  IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
+  NotificationDetails notificationDetails = NotificationDetails(androidNotificationDetails, iosNotificationDetails);
+  await flutterLocalNotificationsPlugin.show(0, 'Hello there', "my dude", notificationDetails);
 }
 
   @override
@@ -45,9 +44,9 @@ await flutterLocalNotificationsPlugin.show(0, 'Hello there', "my dude", notifica
     await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
   }
 
-  Future onSelectNotification(String payLoad){
-    if(payLoad!=null){
-      print(payLoad);
+  Future onSelectNotification(String payload) {
+    if(payload != null) {
+      print(payload);
     }
   }
 

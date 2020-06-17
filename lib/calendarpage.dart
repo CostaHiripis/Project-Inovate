@@ -1,5 +1,9 @@
+import 'package:CheckOff/timerpage.dart';
+import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import "package:table_calendar/table_calendar.dart";
+import 'package:shared_preferences/shared_preferences.dart';
+import 'timerpage.dart';
 
 //This is the root container for the entire screen, it accepts StfWidg
 class CalendarPage extends StatefulWidget {
@@ -9,25 +13,18 @@ class CalendarPage extends StatefulWidget {
 
 //This is the class in which you can initialize widgets
 class _CalendarPageState extends State<CalendarPage> {
+
   CalendarController _controller;
   Map<DateTime, List<dynamic>> _events;
-  Map<DateTime, List<dynamic>> _eventDescriptions;
-  Map<DateTime, List<dynamic>> _finalEventList;
   TextEditingController _eventController;
-  TextEditingController _eventDescriptionController;
   List<dynamic> _selectedEvents;
-  List<dynamic> _selectedEventsDescription;
 
   @override
   void initState() {
     super.initState();
     _controller = CalendarController();
     _eventController = TextEditingController();
-    _eventDescriptionController = TextEditingController();
     _selectedEvents = [];
-    _selectedEventsDescription = [];
-    _finalEventList = {..._events, ..._eventDescriptions};
-    _eventDescriptions = {};
     _events = {};
   }
 
@@ -85,26 +82,23 @@ class _CalendarPageState extends State<CalendarPage> {
                 //Hide the formatter for week/month
                 formatButtonShowsNext: false,
                 formatButtonVisible: false,
-                centerHeaderTitle: true,
+                centerHeaderTitle: false,
               ),
             ),
-            // ..._finalEventList.map((event, description) => SingleChildScrollView(
-            //       scrollDirection: Axis.vertical,
-            //       child: Column(
-            //         children: <Widget>[
-            //           Card(
-            //               child: ListTile(
-            //             onTap: () {},
-            //             title: Text(event),
-                        
-            //             subtitle: Text(event),
-                        
-            //             leading: Icon(Icons.assignment_turned_in),
-            //             trailing: Icon(Icons.more_vert),
-            //           ))
-            //         ],
-            //       ),
-            //     ))
+            ..._selectedEvents.map((event) => SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: <Widget>[
+                      Card(
+                          child: ListTile(
+                        onTap: () {},
+                        title: Text(event),
+                        leading: Icon(Icons.assignment_turned_in),
+                        trailing: Icon(Icons.more_vert),
+                      ))
+                    ],
+                  ),
+                ))
           ],
         ),
       ),
@@ -119,31 +113,13 @@ class _CalendarPageState extends State<CalendarPage> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: Text("Creating new event:"),
-              content: Container(
-                constraints: BoxConstraints(
-                  maxHeight: 100.0,
-                ),
-                child: Column(
-                  children: <Widget>[
-                    TextField(
-                      decoration: InputDecoration(hintText: "Event name"),
-                      controller: _eventController,
-                    ),
-                    TextField(
-                      decoration:
-                          InputDecoration(hintText: "Event description"),
-                      controller: _eventDescriptionController,
-                    )
-                  ],
-                ),
+              content: TextField(
+                controller: _eventController,
               ),
               actions: <Widget>[
                 FlatButton(
                   child: Text("Save"),
                   onPressed: () {
-
-                    //Event name handler
                     if (_eventController.text.isEmpty) return;
                     setState(() {
                       if (_events[_controller.selectedDay] != null) {
@@ -152,21 +128,6 @@ class _CalendarPageState extends State<CalendarPage> {
                       } else {
                         _events[_controller.selectedDay] = [
                           _eventController.text
-                        ];
-                      }
-                      _eventController.clear();
-                      Navigator.pop(context);
-                    });
-
-                    //Event description handler
-                    if (_eventDescriptionController.text.isEmpty) return;
-                    setState(() {
-                      if (_events[_controller.selectedDay] != null) {
-                        _events[_controller.selectedDay]
-                            .add(_eventDescriptionController.text);
-                      } else {
-                        _events[_controller.selectedDay] = [
-                          _eventDescriptionController.text
                         ];
                       }
                       _eventController.clear();
