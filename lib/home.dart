@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'calendarpage.dart';
 import 'timerpage.dart';
-import 'testpage.dart';
+import 'notificationsPage.dart';
 import 'services/rating.dart';
 
 //This is the root container for the entire screen, it accepts StfWidg
