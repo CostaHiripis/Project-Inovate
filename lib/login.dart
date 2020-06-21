@@ -166,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             //---------\\LOGIN CODE HERE\\----------
 
-                            _dbSearch.getUserAccount(email);
+                            _dbSearch.getUserAccount(email.replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
                             //We have to wait around one second for function to find email account
 
                             Timer(Duration(seconds: 1), () {
