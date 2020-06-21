@@ -6,41 +6,35 @@ class TimerPage extends StatefulWidget {
   _TimerPageState createState() => _TimerPageState();
 }
 
-class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver{
-
-  void initState()
-  {
+class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver {
+  void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
   }
 
-  void dispose()
-  {
+  void dispose() {
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
 
-  void didChangeAppLifecycleState(AppLifecycleState state)
-  {
-    super.didChangeAppLifecycleState(state); 
-    switch(state)
-    {
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
       case AppLifecycleState.paused:
-      keepRunning();
-      break;
+        keepRunning();
+        break;
 
       case AppLifecycleState.resumed:
-      keepRunning();
-      break;
+        keepRunning();
+        break;
 
       case AppLifecycleState.inactive:
-      keepRunning();
-      break;
+        keepRunning();
+        break;
 
       case AppLifecycleState.detached:
-      keepRunning();
-      break;
-
+        keepRunning();
+        break;
     }
   }
 
@@ -71,9 +65,10 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver{
   void startStopwatch() {
     sWatch.start();
     startTimer();
-    setState(() { 
+    setState(() {
       running = true;
       buttonStartStopResume = "Stop";
+      isVisible = false;
     });
   }
 
@@ -103,28 +98,32 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver{
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Expanded(
-            flex: 6,
+            flex: 20,
             child: Container(
-              alignment: Alignment.center,
+              alignment: Alignment.bottomCenter,
               child: Text(
                 stopTimeToDisplay,
-                style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 70.0, fontWeight: FontWeight.w700),
               ),
             ),
           ),
           Expanded(
-            flex: 4,
+            flex: 30,
             child: Container(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       RaisedButton(
-                        child: Text(
-                          '$buttonStartStopResume',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 50.0, vertical: 15.0),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Text('$buttonStartStopResume',
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white)),
                         color: running ? Colors.red : Colors.green,
                         onPressed: () {
                           try {
@@ -141,12 +140,19 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver{
                           } on Exception {}
                         },
                       ),
+                      Container(
+                        width: 5,
+                      ), //For the margin between buttons
                       Visibility(
                         visible: isVisible,
                         child: RaisedButton(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50.0, vertical: 15.0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
                           child: Text(
                             'Reset',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(fontSize: 20, color: Colors.white),
                           ),
                           color: Colors.blue,
                           onPressed: () {

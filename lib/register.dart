@@ -106,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: TextFormField(
                                       validator: (val) => val.isEmpty
-                                          ? 'Enter an userName'
+                                          ? 'Enter a username'
                                           : null,
                                       onChanged: (val) {
                                         setState(() {
@@ -190,7 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             MaterialPageRoute(
                                 builder: (context) => registerBuffer()),
                           );
-                          if (result == null) {
+                          if (result == null || result.contains(" ")) {
                             setState(() => error = 'Enter valid email');
                           }
                         }

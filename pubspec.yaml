@@ -39,10 +39,19 @@ dependencies:
   crypto: ^2.1.4
   smooth_star_rating: ^1.1.1
   password: ^1.0.0
+  flutter_local_notifications: ^1.4.4+1
+  scheduled_notifications: ^1.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_launcher_icons: ^0.7.5
+flutter_icons:
+  image_path: "images/logoBlue.png"
+  ios: true
+  android: true
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
