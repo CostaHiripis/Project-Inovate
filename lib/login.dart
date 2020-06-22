@@ -1,11 +1,9 @@
 import 'dart:async';
-
 import 'package:CheckOff/services/auth.dart';
 import 'package:CheckOff/services/database.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:password/password.dart';
-import 'home.dart';
+import 'app.dart';
 import 'register.dart';
 import 'services/auth.dart';
 import 'services/database.dart';
@@ -20,7 +18,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String password = '';
 
   final DbSearch _dbSearch = DbSearch();
-  final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   String error = '';
   var authHandler = new Auth();
@@ -166,33 +163,34 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             //---------\\LOGIN CODE HERE\\----------
 
-                            _dbSearch.getUserAccount(email);
+                            _dbSearch.getUserAccount(email.replaceAll(
+                                new RegExp(r"\s+\b|\b\s"), ""));
                             //We have to wait around one second for function to find email account
 
-                            // Timer(Duration(seconds: 1), () {
-                            //   if (_dbSearch.userPassword.isEmpty) {
-                            //     print("no user found");
-                            //   } else {
-                            //     if (Password.verify(
-                            //         password, _dbSearch.userPassword)) {
-                            //       Navigator.push(
-                            //           context,
-                            //           new MaterialPageRoute(
-                            //               builder: (context) =>
-                            //                   new MainScreen()));
-                            //     } else {
-                            //       print("wrong password");
-                            //     }
-                            //   }
-                            // });
-                            authHandler
-                                .handleSignInEmail(email, password)
-                                .then((FirebaseUser user) {
-                              Navigator.push(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (context) => new MainScreen()));
-                            }).catchError((e) => print(e));
+                            Timer(Duration(seconds: 1), () {
+                              if (_dbSearch.userPassword.isEmpty) {
+                                print("no user found");
+                              } else {
+                                if (Password.verify(
+                                    password, _dbSearch.userPassword)) {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new HomeScreen()));
+                                } else {
+                                  print("wrong password");
+                                }
+                              }
+                            });
+                            // authHandler
+                            //     .handleSignInEmail(email, password)
+                            //     .then((FirebaseUser user) {
+                            //   Navigator.push(
+                            //       context,
+                            //       new MaterialPageRoute(
+                            //           builder: (context) => new MainScreen()));
+                            // }).catchError((e) => print(e));
                           },
                           color: Colors.cyan,
                           textColor: Colors.white,

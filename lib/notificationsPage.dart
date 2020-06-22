@@ -1,35 +1,43 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-
-class TestPage extends StatefulWidget {
-  // final Function toggleView;
-  // TestPage({this.toggleView});
+class NotificationsPage extends StatefulWidget {
 
   @override
-  _TestPageState createState() => _TestPageState();
+  _NotificationsPageState createState() => _NotificationsPageState();
 }
+List<String> notifications = List<String>();
 var secondsTillNotification = 5;
-class _TestPageState extends State<TestPage> {
 
+List<String> getNotifications() {
+  return notifications;
+}
+
+List<String> addNotifications(String name) {
+  notifications.add(name);
+}
+
+class _NotificationsPageState extends State<NotificationsPage> {
+
+  
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   AndroidInitializationSettings androidInitializationSettings;
   IOSInitializationSettings iosInitializationSettings;
   InitializationSettings initializationSettings;
 
-
   void showNotification()async {
     await notification();
   }
 
-Future<void> notification()async {
-  var timeDelayed = DateTime.now().add(Duration(seconds: secondsTillNotification));
-  AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('Channel_ID', 'Channel title', 'channel body', priority: Priority.High, importance: Importance.Max, ticker: 'test');
-  IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
-  NotificationDetails notificationDetails = NotificationDetails(androidNotificationDetails, iosNotificationDetails);
-  await flutterLocalNotificationsPlugin.schedule(0, 'test','Is it working', timeDelayed, notificationDetails);
-}
+  Future<void> notification()async {
+    var timeDelayed = DateTime.now().add(Duration(seconds: secondsTillNotification));
+    AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('Channel_ID', 'Channel title', 'channel body', priority: Priority.High, importance: Importance.Max, ticker: 'test');
+    IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
+    NotificationDetails notificationDetails = NotificationDetails(androidNotificationDetails, iosNotificationDetails);
+    await flutterLocalNotificationsPlugin.schedule(0, 'test','Is it working', timeDelayed, notificationDetails);
+  }
 
   @override
   void initState()
@@ -67,15 +75,24 @@ Future<void> notification()async {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
+
+    notifications = ["test1", "test2", "test3"];
+    List<Widget> notificationsWidgets = List<Widget>();
+    notifications.forEach((item) { 
+      notificationsWidgets.add(
+        Container(
+          padding: const EdgeInsets.all(8.0), 
+          child: Text(item),
+        ),
+      );
+    });
+
     return Scaffold(
-      appBar: new AppBar(
-        title: new Text("Demo"),
-      ),
-      body: new Center(
-        child: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[],
+      body: Center(
+        child: ListView(
+          padding: const EdgeInsets.all(8.0),
+          children: notificationsWidgets,
         ),
       ),
       floatingActionButton: new FloatingActionButton(

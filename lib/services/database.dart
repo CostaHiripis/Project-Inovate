@@ -2,14 +2,24 @@ import 'package:CheckOff/users/student.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+abstract class BaseAuth {
+  Future<FirebaseUser> getCurrentUser();
+}
+
+  class Authenticator implements BaseAuth {
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  Future<FirebaseUser> getCurrentUser() async {
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    return user;
+  }
+  }
+
 class DatabaseService {
   final String uid;
   DatabaseService({this.uid});
-
   //collection reference
   final CollectionReference studentsCollection =
       Firestore.instance.collection('users');
-
   Future<void> updateStudentData(
       String email, String userName, String password, int authority) async {
     return await studentsCollection.document(uid).setData({
@@ -41,6 +51,22 @@ class DatabaseService {
         .document(uid)
         .snapshots()
         .map(_userDataFromSnapshot);
+  }
+
+
+
+  String taskName = "";
+  String taskDescription = "";
+  final CollectionReference userAssignments =
+      Firestore.instance.collection('userAssignments');
+
+  Future<void> addEvent(String eventName, String eventDescription) async {
+    return await userAssignments.document(uid).setData({
+      'taskDescription' : taskDescription,
+      'taskName' : taskName,
+      'userEmail' : _auth.
+
+    });
   }
 }
 
