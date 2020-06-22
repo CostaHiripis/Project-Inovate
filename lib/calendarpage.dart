@@ -1,4 +1,5 @@
 import 'package:CheckOff/notificationsPage.dart';
+import 'package:CheckOff/services/auth.dart';
 import 'package:CheckOff/timerpage.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Map<DateTime, List<dynamic>> _events;
   TextEditingController _eventController;
   List<dynamic> _selectedEvents;
+  final AuthService _auth = AuthService();
 
   @override
   void initState() {
@@ -102,15 +104,17 @@ class _CalendarPageState extends State<CalendarPage> {
               actions: <Widget>[
                 FlatButton(
                   child: Text("Save"),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_eventController.text.isEmpty) return;
-                    setState(() {
+                    setState(() async {
                       if (_events[_controller.selectedDay] != null) {
                         _events[_controller.selectedDay]
                             .add(_eventController.text);
                         addNotifications(_eventController.text);
                       } else {
                         // print(_controller.selectedDay);
+                        dynamic result = await _auth.createAnEvent(
+                            "etsa", DateTime.now(), _controller.selectedDay);
                         _events[_controller.selectedDay] = [
                           _eventController.text
                         ];

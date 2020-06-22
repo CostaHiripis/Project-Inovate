@@ -180,18 +180,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: RaisedButton(
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-                          // var hash = Password.hash(password, new PBKDF2());
-                          dynamic result =
-                              await _auth.registerWithEmailAndPassword(
-                                  email, userName, password);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => registerBuffer()),
-                          );
-                          if (result == null || result.contains(" ")) {
-                            setState(() => error = 'Enter valid email');
+                          try {
+                            var hash = Password.hash(password, new PBKDF2());
+                            dynamic result =
+                                await _auth.registerWithEmailAndPassword(
+                                    email, userName, hash);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => registerBuffer()),
+                            );
+                          } catch (err) {
+                            print(error.toString());
+                            return null;
                           }
+                          // if (result == null || result.contains(" ")) {
+                          //   setState(() => error = 'Enter valid email');
+                          // }
                         }
                         ;
                       },
