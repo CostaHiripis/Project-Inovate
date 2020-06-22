@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:CheckOff/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'registerBuffer.dart';
