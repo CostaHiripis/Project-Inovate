@@ -181,10 +181,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: RaisedButton(
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-                          var hash = Password.hash(password, new PBKDF2());
+                          // var hash = Password.hash(password, new PBKDF2());
                           dynamic result =
                               await _auth.registerWithEmailAndPassword(
-                                  email, userName, hash);
+                                  email, userName, password);
                           Navigator.push(
                             context,
                             MaterialPageRoute(

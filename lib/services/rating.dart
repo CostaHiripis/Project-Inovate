@@ -1,3 +1,4 @@
+import 'package:CheckOff/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
@@ -8,6 +9,7 @@ class Rating extends StatefulWidget {
 
 class _RatingState extends State<Rating> {
   var rating = 3.0;
+  Auth auth = new Auth();
 
   String feedback = '';
   SmoothStarRating stars = new SmoothStarRating();
@@ -76,7 +78,10 @@ class _RatingState extends State<Rating> {
             ),
             RaisedButton(
                 onPressed: () {},
-                child: Text('Post', style: TextStyle(color: Colors.black)))
+                child: Text('Post', style: TextStyle(color: Colors.black))),
+            // Container(
+            //   child: Text("" + auth.returnCurrentUser()),
+            // )
           ],
         )));
   }

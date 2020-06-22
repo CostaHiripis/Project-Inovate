@@ -1,4 +1,6 @@
+import 'package:CheckOff/users/student.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService {
   final String uid;
@@ -14,22 +16,38 @@ class DatabaseService {
       'email': email,
       'userName': userName,
       'password': password,
-      'authority': authority
+      'authority': authority,
+      // 'timestamp': DateTime.now()
     });
   }
 
-  Future<void> getUserAccount(String email, String password) async {
-    // return await studentsCollection.document(uid).get().then((value) => null);
-    return await studentsCollection
-        .where("email", isEqualTo: email)
+  //userData from snapshot
+  UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
+    return UserData(
+        uid: uid,
+        userName: snapshot.data['userName'],
+        email: snapshot.data['email'],
+        authority: snapshot.data['authority']);
+  }
+
+  // get users stream
+  Stream<DocumentSnapshot> get users {
+    // return studentsCollection.snapshots().map(studentsCollection);
+  }
+
+// get user doc stream
+  Stream<UserData> get userData {
+    return studentsCollection
+        .document(uid)
         .snapshots()
-        .listen(
-            (data) => data.documents.forEach((doc) => print(doc["password"])));
+        .map(_userDataFromSnapshot);
   }
 }
 
 class DbSearch {
   String userPassword = "";
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
   final CollectionReference studentsCollection =
       Firestore.instance.collection('users');
 

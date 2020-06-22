@@ -4,16 +4,17 @@ import 'package:CheckOff/services/database.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseUser currentUser;
 
   // create user obj based on firebase user
-  Student _userFromFirebaseUser(FirebaseUser user) {
+  User _userFromFirebaseUser(FirebaseUser user) {
     return user != null
-        ? Student(uid: user.uid, email: user.email, userName: user.displayName)
+        ? User(uid: user.uid, email: user.email, userName: user.displayName)
         : null;
   }
 
   // auth change user stream
-  Stream<Student> get user {
+  Stream<User> get user {
     return _auth.onAuthStateChanged
         // .map((FirebaseUser user) => _userFromFirebaseUser(user));
         .map(_userFromFirebaseUser);
@@ -62,6 +63,13 @@ class AuthService {
     }
   }
 
+  //GetCurrentUser
+
+  getCurrentUser(FirebaseUser givenUser) async {
+    FirebaseUser userData = await FirebaseAuth.instance.currentUser();
+    currentUser = givenUser;
+  }
+
   // sign out
   Future signOut() async {
     try {
@@ -75,11 +83,13 @@ class AuthService {
 
 class Auth {
   final FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseUser logedUser;
 
   Future<FirebaseUser> handleSignInEmail(String email, String password) async {
     AuthResult result =
         await auth.signInWithEmailAndPassword(email: email, password: password);
     final FirebaseUser user = result.user;
+    logedUser = user;
 
     assert(user != null);
     assert(await user.getIdToken() != null);

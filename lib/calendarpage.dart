@@ -13,7 +13,6 @@ class CalendarPage extends StatefulWidget {
 
 //This is the class in which you can initialize widgets
 class _CalendarPageState extends State<CalendarPage> {
-
   CalendarController _controller;
   Map<DateTime, List<dynamic>> _events;
   TextEditingController _eventController;
@@ -126,6 +125,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         _events[_controller.selectedDay]
                             .add(_eventController.text);
                       } else {
+                        // print(_controller.selectedDay);
                         _events[_controller.selectedDay] = [
                           _eventController.text
                         ];

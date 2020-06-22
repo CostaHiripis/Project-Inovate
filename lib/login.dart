@@ -169,30 +169,30 @@ class _LoginScreenState extends State<LoginScreen> {
                             _dbSearch.getUserAccount(email);
                             //We have to wait around one second for function to find email account
 
-                            Timer(Duration(seconds: 1), () {
-                              if (_dbSearch.userPassword.isEmpty) {
-                                print("no user found");
-                              } else {
-                                if (Password.verify(
-                                    password, _dbSearch.userPassword)) {
-                                  Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) =>
-                                              new MainScreen()));
-                                } else {
-                                  print("wrong password");
-                                }
-                              }
-                            });
-                            // authHandler
-                            //     .handleSignInEmail(email, password)
-                            //     .then((FirebaseUser user) {
-                            //   Navigator.push(
-                            //       context,
-                            //       new MaterialPageRoute(
-                            //           builder: (context) => new MainScreen()));
-                            // }).catchError((e) => print(e));
+                            // Timer(Duration(seconds: 1), () {
+                            //   if (_dbSearch.userPassword.isEmpty) {
+                            //     print("no user found");
+                            //   } else {
+                            //     if (Password.verify(
+                            //         password, _dbSearch.userPassword)) {
+                            //       Navigator.push(
+                            //           context,
+                            //           new MaterialPageRoute(
+                            //               builder: (context) =>
+                            //                   new MainScreen()));
+                            //     } else {
+                            //       print("wrong password");
+                            //     }
+                            //   }
+                            // });
+                            authHandler
+                                .handleSignInEmail(email, password)
+                                .then((FirebaseUser user) {
+                              Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => new MainScreen()));
+                            }).catchError((e) => print(e));
                           },
                           color: Colors.cyan,
                           textColor: Colors.white,
