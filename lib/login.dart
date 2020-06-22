@@ -179,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           builder: (context) =>
                                               new HomeScreen()));
                                 } else {
-                                  print("wrong password");
+                                  print("Wrong password");
                                 }
                               }
                             });

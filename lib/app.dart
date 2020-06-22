@@ -35,7 +35,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>  {
   int _selectedIndex = 0;
-  final List<Widget> _widgetOptions =[CalendarPage(), NotificationsPage(),TimerPage(), Rating()];
+  final List<Widget> _widgetOptions =[CalendarPage(), NotificationsPage(), Rating()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -70,10 +70,6 @@ class _HomeScreenState extends State<HomeScreen>  {
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications),
             title: Text('Notifications'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.access_alarm),
-            title: Text('Timer'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.star),
