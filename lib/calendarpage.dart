@@ -11,7 +11,6 @@ class CalendarPage extends StatefulWidget {
 
 //This is the class in which you can initialize widgets
 class _CalendarPageState extends State<CalendarPage> {
-
   NotificationsPage notifications = new NotificationsPage();
 
   CalendarController _controller;
@@ -27,26 +26,6 @@ class _CalendarPageState extends State<CalendarPage> {
     _selectedEvents = [];
     _events = {};
   }
-
-//Convert the calendar events to string
-//Might remove everything below, it belongs to sharedpreferences
-//[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-  Map<String, dynamic> encodeMap(Map<DateTime, dynamic> map) {
-    Map<String, dynamic> newMap = {};
-    map.forEach((key, value) {
-      newMap[key.toString()] = map[key];
-    });
-    return newMap;
-  }
-
-  Map<DateTime, dynamic> decodeMap(Map<String, dynamic> map) {
-    Map<DateTime, dynamic> newMap = {};
-    map.forEach((key, value) {
-      newMap[DateTime.parse(key)] = map[key];
-    });
-    return newMap;
-  }
-//[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 //This is the place in which all the widgets displayed are customized
   @override
@@ -125,8 +104,9 @@ class _CalendarPageState extends State<CalendarPage> {
                       if (_events[_controller.selectedDay] != null) {
                         _events[_controller.selectedDay]
                             .add(_eventController.text);
-                            addNotifications(_eventController.text);
+                        addNotifications(_eventController.text);
                       } else {
+                        // print(_controller.selectedDay);
                         _events[_controller.selectedDay] = [
                           _eventController.text
                         ];

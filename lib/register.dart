@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:CheckOff/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -185,7 +184,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () async {
                         try{
                           if (_formKey.currentState.validate()) {
-                           var hash = Password.hash(password, new PBKDF2());
                             dynamic result = await _auth.registerWithEmailAndPassword(email, userName, hash);
                             Navigator.push(
                               context,
