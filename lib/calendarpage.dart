@@ -15,7 +15,6 @@ class CalendarPage extends StatefulWidget {
 
 //This is the class in which you can initialize widgets
 class _CalendarPageState extends State<CalendarPage> {
-
   NotificationsPage notifications = new NotificationsPage();
 
   CalendarController _controller;
@@ -113,8 +112,9 @@ class _CalendarPageState extends State<CalendarPage> {
                       if (_events[_controller.selectedDay] != null) {
                         _events[_controller.selectedDay]
                             .add(_eventController.text);
-                            addNotifications(_eventController.text);
+                        addNotifications(_eventController.text);
                       } else {
+                        // print(_controller.selectedDay);
                         _events[_controller.selectedDay] = [
                           _eventController.text
                         ];
