@@ -184,7 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () async {
                         try{
                           if (_formKey.currentState.validate()) {
-                            dynamic result = await _auth.registerWithEmailAndPassword(email, userName, hash);
+                            dynamic result = await _auth.registerWithEmailAndPassword(email, userName,password);
                             Navigator.push(
                               context,
                               MaterialPageRoute(

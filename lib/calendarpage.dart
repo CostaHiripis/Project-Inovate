@@ -92,11 +92,11 @@ class _CalendarPageState extends State<CalendarPage> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: "Creating new event";,
+          title: Text("Creating new event"),
               content: TextField(
                 controller: _eventController,
                 decoration: InputDecoration(
-                  hintText: "Event name";
+                  hintText: "Event name",
                 ),
               ),
               actions: <Widget>[

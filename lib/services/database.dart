@@ -1,6 +1,7 @@
 import 'package:CheckOff/users/student.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'auth.dart';
 
 abstract class BaseAuth {
   Future<FirebaseUser> getCurrentUser();
@@ -64,9 +65,14 @@ class DatabaseService {
     return await userAssignments.document(uid).setData({
       'taskDescription' : taskDescription,
       'taskName' : taskName,
-      'userEmail' : _auth.
+      'userEmail' : currentUser(),
 
     });
+  }
+
+  Future<FirebaseUser> currentUser() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    return user;
   }
 }
 
