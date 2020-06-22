@@ -1,9 +1,11 @@
+import 'package:CheckOff/notificationsPage.dart';
 import 'package:CheckOff/timerpage.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import "package:table_calendar/table_calendar.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 import 'timerpage.dart';
+import 'notificationsPage.dart';
 
 //This is the root container for the entire screen, it accepts StfWidg
 class CalendarPage extends StatefulWidget {
@@ -13,6 +15,8 @@ class CalendarPage extends StatefulWidget {
 
 //This is the class in which you can initialize widgets
 class _CalendarPageState extends State<CalendarPage> {
+
+  NotificationsPage notifications = new NotificationsPage();
 
   CalendarController _controller;
   Map<DateTime, List<dynamic>> _events;
@@ -105,6 +109,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       if (_events[_controller.selectedDay] != null) {
                         _events[_controller.selectedDay]
                             .add(_eventController.text);
+                            addNotifications(_eventController.text);
                       } else {
                         _events[_controller.selectedDay] = [
                           _eventController.text

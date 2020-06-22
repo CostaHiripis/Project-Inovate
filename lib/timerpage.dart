@@ -68,6 +68,7 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver {
     setState(() {
       running = true;
       buttonStartStopResume = "Stop";
+      isVisible = false;
     });
   }
 
