@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:CheckOff/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'registerBuffer.dart';
 import 'login.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -24,6 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   String error = '';
+
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: TextFormField(
+                                      autofocus: true,
                                       validator: (val) =>
                                           val.isEmpty ? 'Enter an email' : null,
                                       onChanged: (val) {
@@ -198,7 +201,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           //   setState(() => error = 'Enter valid email');
                           // }
                         }
-                        ;
+                        on PlatformException catch(e){
+                          if(e.code == "ERROR_INVALID_EMAIL") {
+                            print(e);
+                           setState(() => error = 'Enter valid email!');
+                          }
+                        }catch (e) {
+                          if(e.code == "ERROR_EMAIL_ALREADY_IN_USE") {
+                            print(e);
+                            setState(() => error = 'Email already in use!');
+                          }
+                        };
                       },
                       color: Colors.cyan,
                       textColor: Colors.white,
@@ -212,7 +225,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   Container(
-                    // color: Colors.black,
                     child: RaisedButton(
                       onPressed: () {
                         Navigator.push(

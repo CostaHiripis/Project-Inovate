@@ -1,6 +1,7 @@
 import 'package:CheckOff/users/student.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'auth.dart';
 
 abstract class BaseAuth {
   Future<FirebaseUser> getCurrentUser();
