@@ -195,12 +195,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           }
                         }
                         on PlatformException catch(e){
-                          if(e.code == "ERROR_INVALID_EMAIL") {
+                          if(e == "ERROR_INVALID_EMAIL") {
                             print(e);
                            setState(() => error = 'Enter valid email!');
                           }
                         }catch (e) {
-                          if(e.code == "ERROR_EMAIL_ALREADY_IN_USE") {
+                          if(e == "ERROR_EMAIL_ALREADY_IN_USE") {
                             print(e);
                             setState(() => error = 'Email already in use!');
                           }
