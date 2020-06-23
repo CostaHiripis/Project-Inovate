@@ -26,7 +26,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   String error = '';
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -201,17 +200,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           //   setState(() => error = 'Enter valid email');
                           // }
                         }
-                        on PlatformException catch(e){
-                          if(e.code == "ERROR_INVALID_EMAIL") {
-                            print(e);
-                           setState(() => error = 'Enter valid email!');
-                          }
-                        }catch (e) {
-                          if(e.code == "ERROR_EMAIL_ALREADY_IN_USE") {
-                            print(e);
-                            setState(() => error = 'Email already in use!');
-                          }
-                        };
+                        // on PlatformException catch(e){
+                        //   if(e.code == "ERROR_INVALID_EMAIL") {
+                        //     print(e);
+                        //    setState(() => error = 'Enter valid email!');
+                        //   }
+                        // }catch (e) {
+                        //   if(e.code == "ERROR_EMAIL_ALREADY_IN_USE") {
+                        //     print(e);
+                        //     setState(() => error = 'Email already in use!');
+                        //   }
+                        // };
                       },
                       color: Colors.cyan,
                       textColor: Colors.white,
