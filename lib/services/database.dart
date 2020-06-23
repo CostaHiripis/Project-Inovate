@@ -61,7 +61,7 @@ class DatabaseService {
   }
 
 //Add an event
-  Future<void> addEvent(String eventName, String userEmail, DateTime postDate,
+  Future<void> addEvent(String taskName, String userEmail, DateTime postDate,
       DateTime eventDay) async {
     return await userAssignments.document(uid).setData({
       'taskName': taskName,

@@ -1,5 +1,8 @@
 import 'package:CheckOff/notificationsPage.dart';
 import 'package:CheckOff/services/auth.dart';
+import 'package:CheckOff/timerpage.dart';
+import 'package:device_calendar/device_calendar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import "package:table_calendar/table_calendar.dart";
 import 'notificationsPage.dart';
@@ -153,7 +156,9 @@ class _CalendarPageState extends State<CalendarPage> {
                       } else {
                         // print(_controller.selectedDay);
                         dynamic result = await _auth.createAnEvent(
-                            "etsa", DateTime.now(), _controller.selectedDay);
+                            "this is some event blyat",
+                            DateTime.now(),
+                            _controller.selectedDay);
                         _events[_controller.selectedDay] = [
                           _eventController.text
                         ];
