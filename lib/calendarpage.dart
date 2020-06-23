@@ -33,7 +33,7 @@ class _CalendarPageState extends State<CalendarPage> {
     _eventDescriptionController = TextEditingController();
     _selectedEvents = [];
     // _selectedEventsDescription = [];
-    _finalEventList = {..._events, ..._eventDescriptions};
+    // _finalEventList = {..._events, ..._eventDescriptions};
     _eventDescriptions = {};
     _events = {};
   }
