@@ -1,7 +1,5 @@
 import 'package:CheckOff/notificationsPage.dart';
 import 'package:CheckOff/services/auth.dart';
-import 'package:CheckOff/timerpage.dart';
-import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import "package:table_calendar/table_calendar.dart";
 import 'notificationsPage.dart';
@@ -24,6 +22,17 @@ class _CalendarPageState extends State<CalendarPage> {
   TextEditingController _eventDescriptionController;
   List<dynamic> _selectedEvents;
   final AuthService _auth = AuthService();
+  bool reminderCheck = false;
+
+  void _reminderCheckChanged(bool newValue) => setState(() {
+    reminderCheck = newValue;
+
+    if (reminderCheck) {
+      // TODO: enable reminders.
+    } else {
+      // TODO: disable reminders
+    }
+  });
 
   @override
   void initState() {
@@ -76,22 +85,22 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             ),
             // ..._finalEventList.map((event, description) => SingleChildScrollView(
-            //       scrollDirection: Axis.vertical,
-            //       child: Column(
-            //         children: <Widget>[
-            //           Card(
-            //               child: ListTile(
-            //             onTap: () {},
-            //             title: Text(event),
-
-            //             subtitle: Text(event),
-
-            //             leading: Icon(Icons.assignment_turned_in),
-            //             trailing: Icon(Icons.more_vert),
-            //           ))
-            //         ],
-            //       ),
-            //     ))
+//                   scrollDirection: Axis.vertical,
+//                   child: Column(
+//                     children: <Widget>[
+//                       Card(
+//                           child: ListTile(
+//                         onTap: () {},
+//                         title: Text(event),
+//
+//                         subtitle: Text(event),
+//
+//                         leading: Icon(Icons.assignment_turned_in),
+//                         trailing: Icon(Icons.more_vert),
+//                       ))
+//                     ],
+//                   ),
+//                 ))
           ],
         ),
       ),
@@ -109,7 +118,7 @@ class _CalendarPageState extends State<CalendarPage> {
               title: Text("Creating new event:"),
               content: Container(
                 constraints: BoxConstraints(
-                  maxHeight: 100.0,
+                  maxHeight: 155.0,
                 ),
                 child: Column(
                   children: <Widget>[
@@ -121,7 +130,13 @@ class _CalendarPageState extends State<CalendarPage> {
                       decoration:
                           InputDecoration(hintText: "Event description"),
                       controller: _eventDescriptionController,
-                    )
+                    ),
+                    CheckboxListTile(
+                      title: Text("Enable reminders"),
+                      value:reminderCheck,
+                      onChanged: _reminderCheckChanged,
+                      controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+                    ),
                   ],
                 ),
               ),

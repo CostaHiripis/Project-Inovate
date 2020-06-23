@@ -23,7 +23,6 @@ class App extends StatelessWidget {
     );
   }
 }
-
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
 
@@ -36,10 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _widgetOptions = [
     CalendarPage(),
     NotificationsPage(),
-    TimerPage(),
     Rating()
   ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -72,10 +69,6 @@ class _HomeScreenState extends State<HomeScreen> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.notifications),
                 title: Text('Notifications'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.access_alarm),
-                title: Text('Timer'),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.star),

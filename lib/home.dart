@@ -15,7 +15,7 @@ class MainScreen extends StatefulWidget {
 //This is the class in which you can initialize widgets
 class _MainScreenState extends State<MainScreen> {
   //List of pages to be displayed in a swipeable manner
-  List<Widget> pages = [TimerPage(), TestPage(), Rating()];
+  List<Widget> pages = [ TestPage(), Rating()];
   PageController _pageController;
 
   @override
@@ -49,10 +49,6 @@ class _MainScreenState extends State<MainScreen> {
               child: TestPage(),
             ),
           ),
-          Container(
-              child: Center(
-            child: TimerPage(),
-          )),
           Rating(),
         ],
       ),

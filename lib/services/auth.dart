@@ -2,7 +2,6 @@ import 'package:CheckOff/users/student.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:CheckOff/services/database.dart';
 import 'package:random_string/random_string.dart';
-import 'dart:math';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -104,7 +103,7 @@ class Auth {
     assert(await user.getIdToken() != null);
 
     final FirebaseUser currentUser = await auth.currentUser();
-    // logedUser = currentUser;
+    // loggedUser = currentUser;
     assert(user.uid == currentUser.uid);
 
     print('signInEmail succeeded: $user');
