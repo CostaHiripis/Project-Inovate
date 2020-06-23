@@ -7,13 +7,13 @@ abstract class BaseAuth {
   Future<FirebaseUser> getCurrentUser();
 }
 
-  class Authenticator implements BaseAuth {
+class Authenticator implements BaseAuth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser user = await _firebaseAuth.currentUser();
     return user;
   }
-  }
+}
 
 class DatabaseService {
   final String uid;
@@ -21,6 +21,12 @@ class DatabaseService {
   //collection reference
   final CollectionReference studentsCollection =
       Firestore.instance.collection('users');
+
+  String taskName = "";
+  String taskDescription = "";
+  final CollectionReference userAssignments =
+      Firestore.instance.collection('userAssignments');
+
   Future<void> updateStudentData(
       String email, String userName, String password, int authority) async {
     return await studentsCollection.document(uid).setData({
@@ -54,31 +60,28 @@ class DatabaseService {
         .map(_userDataFromSnapshot);
   }
 
-
-
-  String taskName = "";
-  String taskDescription = "";
-  final CollectionReference userAssignments =
-      Firestore.instance.collection('userAssignments');
-
-  Future<void> addEvent(String eventName, String eventDescription) async {
+//Add an event
+  Future<void> addEvent(String eventName, String userEmail, DateTime postDate,
+      DateTime eventDay) async {
     return await userAssignments.document(uid).setData({
-      'taskDescription' : taskDescription,
-      'taskName' : taskName,
-      'userEmail' : currentUser(),
-
+      'taskName': taskName,
+      'userEmail': userEmail,
+      'postDate': postDate,
+      'eventDay': eventDay
     });
   }
 
-  Future<FirebaseUser> currentUser() async {
+//Get current user Email
+  Future<void> getLoggedUserEmail() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    return user;
+    print(user.email);
   }
 }
 
 class DbSearch {
   String userPassword = "";
   final FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseUser user;
 
   final CollectionReference studentsCollection =
       Firestore.instance.collection('users');
@@ -88,6 +91,7 @@ class DbSearch {
 
     //We reset field userPassword
     userPassword = "";
+
     //We look for user with email that was given in login form
     return studentsCollection
         .where("email", isEqualTo: email)

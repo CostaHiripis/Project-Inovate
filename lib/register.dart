@@ -26,7 +26,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   String error = '';
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -182,29 +181,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     // color: Colors.black,
                     child: RaisedButton(
                       onPressed: () async {
-                        try{
-                          if (_formKey.currentState.validate()) {
-                            dynamic result = await _auth.registerWithEmailAndPassword(email, userName,password);
+                        if (_formKey.currentState.validate()) {
+                          try {
+                            var hash = Password.hash(password, new PBKDF2());
+                            dynamic result =
+                                await _auth.registerWithEmailAndPassword(
+                                    email, userName, hash);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => registerBuffer()),);
-                            if (result == null || result.contains(" ")) {
-                              setState(() => error = 'Enter valid email');
-                            }
+                                  builder: (context) => registerBuffer()),
+                            );
+                          } catch (err) {
+                            print(error.toString());
+                            return null;
                           }
+                          // if (result == null || result.contains(" ")) {
+                          //   setState(() => error = 'Enter valid email');
+                          // }
                         }
-                        on PlatformException catch(e){
-                          if(e == "ERROR_INVALID_EMAIL") {
-                            print(e);
-                           setState(() => error = 'Enter valid email!');
-                          }
-                        }catch (e) {
-                          if(e == "ERROR_EMAIL_ALREADY_IN_USE") {
-                            print(e);
-                            setState(() => error = 'Email already in use!');
-                          }
-                        };
+                        // on PlatformException catch(e){
+                        //   if(e.code == "ERROR_INVALID_EMAIL") {
+                        //     print(e);
+                        //    setState(() => error = 'Enter valid email!');
+                        //   }
+                        // }catch (e) {
+                        //   if(e.code == "ERROR_EMAIL_ALREADY_IN_USE") {
+                        //     print(e);
+                        //     setState(() => error = 'Email already in use!');
+                        //   }
+                        // };
                       },
                       color: Colors.cyan,
                       textColor: Colors.white,

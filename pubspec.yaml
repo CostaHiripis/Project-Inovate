@@ -40,6 +40,8 @@ dependencies:
   smooth_star_rating: ^1.1.1
   password: ^1.0.0
   flutter_local_notifications: ^1.4.4+1
+  scheduled_notifications: ^1.0.0
+  random_string: ^2.0.1
 
 dev_dependencies:
   flutter_test:

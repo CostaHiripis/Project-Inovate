@@ -1,4 +1,7 @@
 import 'package:CheckOff/notificationsPage.dart';
+import 'package:CheckOff/services/auth.dart';
+import 'package:CheckOff/timerpage.dart';
+import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import "package:table_calendar/table_calendar.dart";
 import 'notificationsPage.dart';
@@ -20,7 +23,7 @@ class _CalendarPageState extends State<CalendarPage> {
   TextEditingController _eventController;
   TextEditingController _eventDescriptionController;
   List<dynamic> _selectedEvents;
-  List<dynamic> _selectedEventsDescription;
+  final AuthService _auth = AuthService();
 
   @override
   void initState() {
@@ -29,8 +32,8 @@ class _CalendarPageState extends State<CalendarPage> {
     _eventController = TextEditingController();
     _eventDescriptionController = TextEditingController();
     _selectedEvents = [];
-    _selectedEventsDescription = [];
-    _finalEventList = {..._events, ..._eventDescriptions};
+    // _selectedEventsDescription = [];
+    // _finalEventList = {..._events, ..._eventDescriptions};
     _eventDescriptions = {};
     _events = {};
   }
@@ -125,17 +128,17 @@ class _CalendarPageState extends State<CalendarPage> {
               actions: <Widget>[
                 FlatButton(
                   child: Text("Save"),
-                  onPressed: () {
-
-                    //Event name handler
+                  onPressed: () async {
                     if (_eventController.text.isEmpty) return;
-                    setState(() {
+                    setState(() async {
                       if (_events[_controller.selectedDay] != null) {
                         _events[_controller.selectedDay]
                             .add(_eventController.text);
                         addNotifications(_eventController.text);
                       } else {
                         // print(_controller.selectedDay);
+                        dynamic result = await _auth.createAnEvent(
+                            "etsa", DateTime.now(), _controller.selectedDay);
                         _events[_controller.selectedDay] = [
                           _eventController.text
                         ];

@@ -1,10 +1,11 @@
 import 'package:CheckOff/users/student.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:CheckOff/services/database.dart';
+import 'package:random_string/random_string.dart';
+import 'dart:math';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseUser currentUser;
 
   // create user obj based on firebase user
   User _userFromFirebaseUser(FirebaseUser user) {
@@ -63,19 +64,27 @@ class AuthService {
     }
   }
 
-  //GetCurrentUser
-
-  getCurrentUser(FirebaseUser givenUser) async {
-    FirebaseUser userData = await FirebaseAuth.instance.currentUser();
-    currentUser = givenUser;
-  }
-
   // sign out
   Future signOut() async {
     try {
       return await _auth.signOut();
     } catch (error) {
       print(error.toString());
+      return null;
+    }
+  }
+
+// create and event
+  Future createAnEvent(
+      String taskName, DateTime postDate, DateTime eventDate) async {
+    try {
+      String rndString = randomString(10);
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+      await DatabaseService(uid: rndString)
+          .addEvent(taskName, user.email, postDate, eventDate);
+    } catch (err) {
+      print(err.toString());
       return null;
     }
   }
@@ -95,6 +104,7 @@ class Auth {
     assert(await user.getIdToken() != null);
 
     final FirebaseUser currentUser = await auth.currentUser();
+    // logedUser = currentUser;
     assert(user.uid == currentUser.uid);
 
     print('signInEmail succeeded: $user');
