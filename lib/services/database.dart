@@ -99,4 +99,15 @@ class DbSearch {
         .listen((data) =>
             data.documents.forEach((doc) => userPassword = doc["password"]));
   }
+
+  Future<void> getEventsOfUser(String email) async {
+    // return await studentsCollection.document(uid).get().then((value) => null);
+
+    //We look for user with email that was given in login form
+    return studentsCollection
+        .where("email", isEqualTo: email)
+        .snapshots()
+        .listen((data) =>
+            data.documents.forEach((doc) => userPassword = doc["eventDay"]));
+  }
 }

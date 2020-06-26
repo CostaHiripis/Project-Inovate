@@ -27,15 +27,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (FirebaseAuth.instance.currentUser() != null) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-              (Route<dynamic> route) => false,
-        );
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (FirebaseAuth.instance.currentUser() != null) {
+    //     Navigator.pushAndRemoveUntil(
+    //       context,
+    //       MaterialPageRoute(builder: (context) => HomeScreen()),
+    //           (Route<dynamic> route) => false,
+    //     );
+    //   }
+    // });
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
