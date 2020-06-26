@@ -151,7 +151,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       } else {
                         // print(_controller.selectedDay);
                         dynamic result = await _auth.createAnEvent(
-                            "this is some event blyat",
+                            _eventController.text,
                             DateTime.now(),
                             _controller.selectedDay);
                         _events[_controller.selectedDay] = [
