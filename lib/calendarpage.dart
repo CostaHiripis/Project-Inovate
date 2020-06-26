@@ -1,6 +1,10 @@
 import 'package:CheckOff/notificationsPage.dart';
 import 'package:CheckOff/services/auth.dart';
+import 'package:CheckOff/services/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import "package:table_calendar/table_calendar.dart";
 import 'notificationsPage.dart';
 
@@ -13,6 +17,9 @@ class CalendarPage extends StatefulWidget {
 //This is the class in which you can initialize widgets
 class _CalendarPageState extends State<CalendarPage> {
   NotificationsPage notifications = new NotificationsPage();
+  final DatabaseService _dbServices = DatabaseService();
+  final AuthService _auth = AuthService();
+  static bool alreadyLoaded = false;
 
   CalendarController _controller;
   Map<DateTime, List<dynamic>> _events;
@@ -21,7 +28,7 @@ class _CalendarPageState extends State<CalendarPage> {
   TextEditingController _eventController;
   TextEditingController _eventDescriptionController;
   List<dynamic> _selectedEvents;
-  final AuthService _auth = AuthService();
+
   bool reminderCheck = false;
 
   void _reminderCheckChanged(bool newValue) => setState(() {
@@ -40,14 +47,40 @@ class _CalendarPageState extends State<CalendarPage> {
     _controller = CalendarController();
     _eventController = TextEditingController();
     _eventDescriptionController = TextEditingController();
+
+    // This code is suppose to get all the
+    Future<void> storeUserEventsInMap() async {
+      //We look for user with email that was given in login form
+      if (alreadyLoaded == false) {
+        final CollectionReference userAssignments =
+            Firestore.instance.collection('userAssignments');
+        FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+        userAssignments
+            .where("userEmail", isEqualTo: user.email)
+            .snapshots()
+            .listen((data) => data.documents.forEach((doc) {
+                  DateTime eventDay = doc["eventDay"].toDate();
+
+                  //We format date to string and we get only Year,Month and day
+                  var formater = new DateFormat('yyyy-MM-dd');
+                  String formatted = formater.format(eventDay);
+                  String taskName = doc["taskName"];
+                }));
+        alreadyLoaded = true;
+      }
+    }
+
     _selectedEvents = [];
-    // _selectedEventsDescription = [];
-    // _finalEventList = {..._events, ..._eventDescriptions};
     _eventDescriptions = {};
     _events = {};
+    // _selectedEventsDescription = [];
+    // _finalEventList = {..._events, ..._eventDescriptions};
+    storeUserEventsInMap();
   }
 
 //This is the place in which all the widgets displayed are customized
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -180,6 +213,4 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 }
 
-class showEvenNotification {
-
-}
+class showEvenNotification {}

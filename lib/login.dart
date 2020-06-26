@@ -19,7 +19,9 @@ class _LoginScreenState extends State<LoginScreen> {
   String password = '';
   // final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  final DbSearch _dbSearch = DbSearch();
+  // final DbSearch _dbSearch = DbSearch();
+  final DatabaseService _dbServices = DatabaseService();
+
   final _formKey = GlobalKey<FormState>();
   String error = '';
   // var authHandler = new Auth();
@@ -176,23 +178,25 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             //---------\\LOGIN CODE HERE\\----------
 
-                            _dbSearch.getUserAccount(email.replaceAll(
-                                new RegExp(r"\s+\b|\b\s"), ""));
+                            // _dbSearch.getUserAccount(email.replaceAll(
+                            //     new RegExp(r"\s+\b|\b\s"), ""));
                             //We have to wait around one second for function to find email account
 
                             Timer(Duration(seconds: 1), () {
-                              if (_dbSearch.userPassword.isEmpty) {
-                                print("no user found");
+                              if (email.length == 0) {
+                                print("Field for email is empty");
                               } else {
                                 auth
                                     .handleSignInEmail(email, password)
                                     .then((FirebaseUser user) {
+                                  _dbServices.storeUserEventsInMap(email);
                                   Navigator.push(
                                       context,
                                       new MaterialPageRoute(
                                           builder: (context) =>
                                               new HomeScreen()));
                                 }).catchError((e) => print(e));
+
                                 // if (Password.verify(
                                 //     password, _dbSearch.userPassword)) {
                                 //   Navigator.push(

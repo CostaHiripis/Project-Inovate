@@ -59,10 +59,11 @@ class _HomeScreenState extends State<HomeScreen> {
               FlatButton(
                 onPressed: () async {
                   _auth.signOut();
+                  CalendarPage calendarPage = CalendarPage();
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => LoginScreen()),
-                        (Route<dynamic> route) => false,
+                    (Route<dynamic> route) => false,
                   );
                 },
                 child: Text('Yes'),

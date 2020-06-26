@@ -1,7 +1,9 @@
 import 'package:CheckOff/users/student.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'auth.dart';
+import 'package:quiver/collection.dart';
 
 abstract class BaseAuth {
   Future<FirebaseUser> getCurrentUser();
@@ -22,9 +24,11 @@ class DatabaseService {
   final CollectionReference studentsCollection =
       Firestore.instance.collection('users');
 
-  String taskName = "";
-  String taskDescription = "";
-  String userEventDay = "";
+  // String taskName = "";
+
+  // List<String> userEventDays = new List();
+  // List<String> userEventTaskDescriptions = new List();
+  static var mapOfUserEvents = new Multimap();
 
   final CollectionReference userAssignments =
       Firestore.instance.collection('userAssignments');
@@ -80,38 +84,58 @@ class DatabaseService {
   }
 
 //Get all the events of the user
-  Future<void> getEventsOfUser(String email) async {
-    // return await studentsCollection.document(uid).get().then((value) => null);
-
-    //We reset field eventDay
-    userEventDay = "";
-
+  Future<void> storeUserEventsInMap(String email) {
     //We look for user with email that was given in login form
-    return userAssignments.where("email", isEqualTo: email).snapshots().listen(
-        (data) =>
-            data.documents.forEach((doc) => userEventDay = doc["eventDay"]));
+
+    if (mapOfUserEvents.length == 0) {
+      userAssignments
+          .where("userEmail", isEqualTo: email)
+          .snapshots()
+          .listen((data) => data.documents.forEach((doc) {
+                DateTime eventDay = doc["eventDay"].toDate();
+
+                //We format date to string and we get only Year,Month and day
+                var formater = new DateFormat('yyyy-MM-dd');
+                String formatted = formater.format(eventDay);
+                String taskName = doc["taskName"];
+                int ck = 0;
+                mapOfUserEvents.add(formatted, taskName);
+
+                // userEventTaskDescriptions.add(taskName);
+                // mapOfUserEvents
+                //     .addAll({'EventDay': eventDay, 'TaskName': taskName});
+              }));
+    }
+  }
+
+  void printMap() {
+    mapOfUserEvents.forEach((key, value) {
+      // String stringKey = key.toString();
+
+      print('$key : $value');
+    });
   }
 }
 
-class DbSearch {
-  String userPassword = "";
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  FirebaseUser user;
+// class DbSearch {
+//   String userPassword = "";
+//   final FirebaseAuth auth = FirebaseAuth.instance;
+//   FirebaseUser user;
 
-  final CollectionReference studentsCollection =
-      Firestore.instance.collection('users');
+//   final CollectionReference studentsCollection =
+//       Firestore.instance.collection('users');
 
-  Future<void> getUserAccount(String email) async {
-    // return await studentsCollection.document(uid).get().then((value) => null);
+//   Future<void> getUserAccount(String email) async {
+//     // return await studentsCollection.document(uid).get().then((value) => null);
 
-    //We reset field userPassword
-    userPassword = "";
+//     //We reset field userPassword
+//     userPassword = "";
 
-    //We look for user with email that was given in login form
-    return studentsCollection
-        .where("email", isEqualTo: email)
-        .snapshots()
-        .listen((data) =>
-            data.documents.forEach((doc) => userPassword = doc["password"]));
-  }
-}
+//     //We look for user with email that was given in login form
+//     return studentsCollection
+//         .where("email", isEqualTo: email)
+//         .snapshots()
+//         .listen((data) =>
+//             data.documents.forEach((doc) => userPassword = doc["password"]));
+//   }
+// }

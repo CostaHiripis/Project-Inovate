@@ -42,6 +42,7 @@ dependencies:
   flutter_local_notifications: ^1.4.4+1
   scheduled_notifications: ^1.0.0
   random_string: ^2.0.1
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:
