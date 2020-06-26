@@ -26,6 +26,15 @@ class _LoginScreenState extends State<LoginScreen> {
   var authHandler = new Auth();
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (FirebaseAuth.instance.currentUser() != null) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+              (Route<dynamic> route) => false,
+        );
+      }
+    });
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -176,11 +185,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               } else {
                                 if (Password.verify(
                                     password, _dbSearch.userPassword)) {
-                                  Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) =>
-                                              new HomeScreen()));
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                                        (Route<dynamic> route) => false,
+                                  );
                                 } else {
                                   print("Wrong password");
                                 }
