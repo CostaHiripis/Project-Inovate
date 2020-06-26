@@ -24,6 +24,8 @@ class DatabaseService {
 
   String taskName = "";
   String taskDescription = "";
+  String userEventDay = "";
+
   final CollectionReference userAssignments =
       Firestore.instance.collection('userAssignments');
 
@@ -76,6 +78,19 @@ class DatabaseService {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     print(user.email);
   }
+
+//Get all the events of the user
+  Future<void> getEventsOfUser(String email) async {
+    // return await studentsCollection.document(uid).get().then((value) => null);
+
+    //We reset field eventDay
+    userEventDay = "";
+
+    //We look for user with email that was given in login form
+    return userAssignments.where("email", isEqualTo: email).snapshots().listen(
+        (data) =>
+            data.documents.forEach((doc) => userEventDay = doc["eventDay"]));
+  }
 }
 
 class DbSearch {
@@ -98,16 +113,5 @@ class DbSearch {
         .snapshots()
         .listen((data) =>
             data.documents.forEach((doc) => userPassword = doc["password"]));
-  }
-
-  Future<void> getEventsOfUser(String email) async {
-    // return await studentsCollection.document(uid).get().then((value) => null);
-
-    //We look for user with email that was given in login form
-    return studentsCollection
-        .where("email", isEqualTo: email)
-        .snapshots()
-        .listen((data) =>
-            data.documents.forEach((doc) => userPassword = doc["eventDay"]));
   }
 }
