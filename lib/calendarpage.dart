@@ -28,14 +28,14 @@ class _CalendarPageState extends State<CalendarPage> {
   bool reminderCheck = false;
 
   void _reminderCheckChanged(bool newValue) => setState(() {
-    reminderCheck = newValue;
+        reminderCheck = newValue;
 
-    if (reminderCheck) {
-      // TODO: enable reminders.
-    } else {
-      // TODO: disable reminders
-    }
-  });
+        if (reminderCheck) {
+          // TODO: enable reminders.
+        } else {
+          // TODO: disable reminders
+        }
+      });
 
   @override
   void initState() {
@@ -129,16 +129,12 @@ class _CalendarPageState extends State<CalendarPage> {
                       decoration: InputDecoration(hintText: "Event name"),
                       controller: _eventController,
                     ),
-                    TextField(
-                      decoration:
-                          InputDecoration(hintText: "Event description"),
-                      controller: _eventDescriptionController,
-                    ),
                     CheckboxListTile(
                       title: Text("Enable reminders"),
-                      value:reminderCheck,
+                      value: reminderCheck,
                       onChanged: _reminderCheckChanged,
-                      controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+                      controlAffinity: ListTileControlAffinity
+                          .leading, //  <-- leading Checkbox
                     ),
                   ],
                 ),
@@ -147,7 +143,6 @@ class _CalendarPageState extends State<CalendarPage> {
                 FlatButton(
                   child: Text("Save"),
                   onPressed: () async {
-                    if (_eventController.text.isEmpty) return;
                     setState(() async {
                       if (_events[_controller.selectedDay] != null) {
                         _events[_controller.selectedDay]
