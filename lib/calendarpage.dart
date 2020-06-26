@@ -1,8 +1,5 @@
 import 'package:CheckOff/notificationsPage.dart';
 import 'package:CheckOff/services/auth.dart';
-import 'package:CheckOff/timerpage.dart';
-import 'package:device_calendar/device_calendar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import "package:table_calendar/table_calendar.dart";
 import 'notificationsPage.dart';
@@ -181,4 +178,8 @@ class _CalendarPageState extends State<CalendarPage> {
               ],
             ));
   }
+}
+
+class showEvenNotification {
+
 }
