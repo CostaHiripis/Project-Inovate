@@ -23,6 +23,7 @@ class App extends StatelessWidget {
     );
   }
 }
+
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
 
@@ -46,6 +47,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(0),
+          child: AppBar(),
+        ),
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
