@@ -76,25 +76,7 @@ await flutterLocalNotificationsPlugin.show(0, 'Hello there', "my dude", notifica
 
   @override
   Widget build(BuildContext context) { 
-
-    notifications = ["test1", "test2", "test3"];
-    List<Widget> notificationsWidgets = List<Widget>();
-    notifications.forEach((item) { 
-      notificationsWidgets.add(
-        Container(
-          padding: const EdgeInsets.all(8.0), 
-          child: Text(item),
-        ),
-      );
-    });
-
     return Scaffold(
-      body: Center(
-        child: ListView(
-          padding: const EdgeInsets.all(8.0),
-          children: notificationsWidgets,
-        ),
-      ),
       floatingActionButton: new FloatingActionButton(
         onPressed: showNotification,
         child: new Icon(Icons.notifications),
