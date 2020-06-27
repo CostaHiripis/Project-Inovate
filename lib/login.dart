@@ -189,7 +189,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 auth
                                     .handleSignInEmail(email, password)
                                     .then((FirebaseUser user) {
-                                  _dbServices.storeUserEventsInMap(email);
                                   Navigator.push(
                                       context,
                                       new MaterialPageRoute(
