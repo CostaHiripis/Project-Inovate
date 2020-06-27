@@ -49,7 +49,7 @@ class _CalendarPageState extends State<CalendarPage> {
     _eventDescriptionController = TextEditingController();
 
     // This code is suppose to get all the
-    Future<void> storeUserEventsInMap() async {
+    Future<void> getUserEvents() async {
       //We look for user with email that was given in login form
       if (alreadyLoaded == false) {
         final CollectionReference userAssignments =
@@ -76,7 +76,7 @@ class _CalendarPageState extends State<CalendarPage> {
     _events = {};
     // _selectedEventsDescription = [];
     // _finalEventList = {..._events, ..._eventDescriptions};
-    storeUserEventsInMap();
+    getUserEvents();
   }
 
 //This is the place in which all the widgets displayed are customized
