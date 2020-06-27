@@ -3,47 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class NotificationsPage extends StatefulWidget {
+class NotificationsPage {
 
-  @override
-  _NotificationsPageState createState() => _NotificationsPageState();
-}
-List<String> notifications = List<String>();
-var secondsTillNotification = 10;
-
-List<String> getNotifications() {
-  return notifications;
-}
-
-List<String> addNotifications(String name) {
-  notifications.add(name);
-}
-
-class _NotificationsPageState extends State<NotificationsPage> {
-
-  
+  var secondsTillNotification = 10;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   AndroidInitializationSettings androidInitializationSettings;
   IOSInitializationSettings iosInitializationSettings;
   InitializationSettings initializationSettings;
 
-  void showNotification()async {
-    await notification();
+  void showNotification(String title, String body)async {
+    await notification(title, body);
   }
 
-  Future<void> notification()async {
+  Future<void> notification(String title, String body)async {
     var timeDelayed = DateTime.now().add(Duration(seconds: secondsTillNotification));
     AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('Channel_ID', 'Channel title', 'channel body', priority: Priority.High, importance: Importance.Max, ticker: 'test');
     IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
     NotificationDetails notificationDetails = NotificationDetails(androidNotificationDetails, iosNotificationDetails);
-    await flutterLocalNotificationsPlugin.schedule(0, 'test','Is it working', timeDelayed, notificationDetails);
-  }
-
-  @override
-  void initState()
-  {
-    super.initState();
-    initializing();
+    await flutterLocalNotificationsPlugin.schedule(0, title, body, timeDelayed, notificationDetails);
   }
 
   void initializing()async {
@@ -71,16 +48,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
           },
           child: Text("ok"),)
       ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) { 
-    return Scaffold(
-      floatingActionButton: new FloatingActionButton(
-        onPressed: showNotification,
-        child: new Icon(Icons.notifications),
-      ),
     );
   }
 }

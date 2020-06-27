@@ -12,6 +12,9 @@ import "package:table_calendar/table_calendar.dart";
 import 'notificationsPage.dart';
 
 final DatabaseService _databaseService = DatabaseService();
+NotificationsPage notificationsPage = new NotificationsPage();
+var reminderTimeInSeconds;
+String taskName;
 
 //This is the root container for the entire screen, it accepts StfWidg
 class CalendarPage extends StatefulWidget {
@@ -21,6 +24,7 @@ class CalendarPage extends StatefulWidget {
 
 //This is the class in which you can initialize widgets
 class _CalendarPageState extends State<CalendarPage> {
+
   final DatabaseService _dbServices = DatabaseService();
   final AuthService _auth = AuthService();
   static bool alreadyLoaded = false;
@@ -65,6 +69,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void initState() {
     super.initState();
+    notificationsPage.initializing();
     _controller = CalendarController();
     _eventController = TextEditingController();
 //    _eventDescriptionController = TextEditingController();
@@ -186,6 +191,8 @@ class _CalendarPageState extends State<CalendarPage> {
                 if (_formKey.currentState.validate()) {
                   if (_events[_controller.selectedDay] != null) {
                     _events[_controller.selectedDay].add(_eventController.text);
+                    notificationsPage.secondsTillNotification = reminderTimeInSeconds;
+                    notificationsPage.showNotification('You got work to do', _eventController.text);
                   } else {
                     //Create the event and push it to the database
                     dynamic result = await _auth.createAnEvent(
@@ -252,9 +259,29 @@ class addCheckAndDrop extends State<addForm> {
                 child: Text(dropDownStringItem),
               );
             }).toList(),
-            onChanged: reminderCheck
-                ? (newValue) => setState(() => _currentItem = newValue)
-                : null,
+            onChanged: (newValue) {
+              setState(() {
+                _currentItem = newValue;
+                
+                switch (_currentItem) {
+                  case '15 minutes':
+                  reminderTimeInSeconds = 900;
+                  break;
+                  case '30 minutes':
+                  reminderTimeInSeconds = 1800;
+                  break;
+                  case '1 hour':
+                  reminderTimeInSeconds = 3600;
+                  break;
+                  case '6 hours':
+                  reminderTimeInSeconds = 21600;
+                  break;
+                  case '1 day':
+                  reminderTimeInSeconds = 86400;
+                  break;
+                }
+              });
+            },
           ),
         ],
       ),
