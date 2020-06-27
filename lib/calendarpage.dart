@@ -197,8 +197,6 @@ class addCheckAndDrop extends State<addForm>{
   String _currentItem = '1 hour';
   bool reminderCheck = false;
   var DropDownItems = ['15 minutes','30 minutes','1 hour','6 hours','1 day'];
-
-
   @override
   Widget build(BuildContext context) {
     return     Container(
@@ -223,13 +221,7 @@ class addCheckAndDrop extends State<addForm>{
                 child: Text(dropDownStringItem),
               );
             }).toList(),
-            onChanged: (newValue) {
-              setState(() {
-                _currentItem = newValue;
-              });
-              print(newValue);
-              print(_currentItem);
-            },
+            onChanged: reminderCheck ? (newValue) => setState(() => _currentItem = newValue) : null,
           ),
         ],
       ),
