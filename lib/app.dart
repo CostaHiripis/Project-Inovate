@@ -34,18 +34,49 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  var auth = new AuthService();
+  var _auth = new AuthService();
   int _selectedIndex = 0;
   final List<Widget> _widgetOptions = [
     CalendarPage(),
     NotificationsPage(),
     Rating(),
-    SignoutScreen(),
+    // SignoutScreen(),
   ];
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index == 3) {
+      setState(() {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Do you want to exit this application?'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('No'),
+              ),
+              FlatButton(
+                onPressed: () async {
+                  _auth.signOut();
+                  CalendarPage calendarPage = CalendarPage();
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: Text('Yes'),
+              ),
+            ],
+          ),
+        );
+      });
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
