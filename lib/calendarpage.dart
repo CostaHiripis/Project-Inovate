@@ -9,6 +9,10 @@ import "package:table_calendar/table_calendar.dart";
 import 'notificationsPage.dart';
 
 final DatabaseService _databaseService = DatabaseService();
+NotificationsPage notificationsPage = new NotificationsPage();
+var reminderTimeInSeconds;
+String taskName;
+String _currentItem;
 
 //This is the root container for the entire screen, it accepts StfWidg
 class CalendarPage extends StatefulWidget {
@@ -18,6 +22,7 @@ class CalendarPage extends StatefulWidget {
 
 //This is the class in which you can initialize widgets
 class _CalendarPageState extends State<CalendarPage> {
+
   final DatabaseService _dbServices = DatabaseService();
   final AuthService _auth = AuthService();
   static bool alreadyLoaded = false;
@@ -30,6 +35,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void initState() {
     super.initState();
+    notificationsPage.initializing();
     _controller = CalendarController();
     _eventController = TextEditingController();
 //    _eventDescriptionController = TextEditingController();
@@ -51,7 +57,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   //We format date to string and we get only Year,Month and day
                   var formater = new DateFormat('yyyy-MM-dd');
                   String formatted = formater.format(eventDay);
-                  String taskName = doc["taskName"];
+                  taskName = doc["taskName"];
                   print('$formatted + $taskName');
                 }));
         alreadyLoaded = true;
@@ -161,6 +167,9 @@ class _CalendarPageState extends State<CalendarPage> {
                       if (_events[_controller.selectedDay] != null) {
                         _events[_controller.selectedDay]
                             .add(_eventController.text);
+
+                            notificationsPage.secondsTillNotification = reminderTimeInSeconds;
+                            notificationsPage.showNotification('You got work to do', _eventController.text);
                       } else {
                         //Create the event and push it to the database
                         dynamic result = await _auth.createAnEvent(
@@ -194,7 +203,7 @@ class addForm extends StatefulWidget{
 }
 
 class addCheckAndDrop extends State<addForm>{
-  String _currentItem = '1 hour';
+  String _currentItem = '15 minutes'; 
   bool reminderCheck = false;
   var DropDownItems = ['15 minutes','30 minutes','1 hour','6 hours','1 day'];
 
@@ -226,6 +235,24 @@ class addCheckAndDrop extends State<addForm>{
             onChanged: (newValue) {
               setState(() {
                 _currentItem = newValue;
+                
+                switch (_currentItem) {
+                  case '15 minutes':
+                  reminderTimeInSeconds = 900;
+                  break;
+                  case '30 minutes':
+                  reminderTimeInSeconds = 1800;
+                  break;
+                  case '1 hour':
+                  reminderTimeInSeconds = 3600;
+                  break;
+                  case '6 hours':
+                  reminderTimeInSeconds = 21600;
+                  break;
+                  case '1 day':
+                  reminderTimeInSeconds = 86400;
+                  break;
+                }
               });
               print(newValue);
               print(_currentItem);
