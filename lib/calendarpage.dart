@@ -36,8 +36,7 @@ class _CalendarPageState extends State<CalendarPage> {
     notificationsPage.initializing();
     _controller = CalendarController();
     _eventController = TextEditingController();
-    //_eventDescriptionController = TextEditingController();
-    WidgetsBinding.instance.addPostFrameCallback((_){_showAddDialog();});
+//    _eventDescriptionController = TextEditingController();
 
     // This code is suppose to get all the
     Future<void> getUserEvents() async {
@@ -145,7 +144,7 @@ class _CalendarPageState extends State<CalendarPage> {
               content: Container(
                 constraints: BoxConstraints(
                   //Alert box min height without cause conflicts with the checkbox
-                  maxHeight: 104,
+                  maxHeight: 155,
                 ),
                 child: Column(
                   children: <Widget>[
@@ -203,11 +202,6 @@ class addCheckAndDrop extends State<addForm>{
   bool reminderCheck = false;
   var DropDownItems = ['15 minutes','30 minutes','1 hour','6 hours','1 day'];
 
-
-  @override
-  void initState(){
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
