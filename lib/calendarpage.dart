@@ -21,7 +21,7 @@ class _CalendarPageState extends State<CalendarPage> {
   final DatabaseService _dbServices = DatabaseService();
   final AuthService _auth = AuthService();
   static bool alreadyLoaded = false;
-
+  List<String> tasks = new List<String>();
   CalendarController _controller;
   Map<DateTime, List<dynamic>> _events;
   TextEditingController _eventController;
@@ -48,8 +48,9 @@ class _CalendarPageState extends State<CalendarPage> {
               String formatted = formater.format(eventDay);
               String taskName = doc["taskName"];
 
-              print("found");
-              _events[_controller.selectedDay].add(taskName);
+              tasks.add(taskName);
+
+              // _events[_controller.selectedDay].add(taskName);
               // print('$formatted + $taskName');
             }));
     // alreadyLoaded = true;
