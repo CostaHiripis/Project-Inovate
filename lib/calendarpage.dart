@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:CheckOff/notificationsPage.dart';
 import 'package:CheckOff/services/auth.dart';
 import 'package:CheckOff/services/database.dart';
@@ -22,6 +25,7 @@ class _CalendarPageState extends State<CalendarPage> {
   final AuthService _auth = AuthService();
   static bool alreadyLoaded = false;
   List<String> tasks = new List<String>();
+
   final _formKey = GlobalKey<FormState>();
   CalendarController _controller;
   Map<DateTime, List<dynamic>> _events;
@@ -37,7 +41,8 @@ class _CalendarPageState extends State<CalendarPage> {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     var formater = new DateFormat('yyyy-MM-dd');
     String formatted = formater.format(_controller.selectedDay);
-
+    tasks.clear();
+    // await formatted;
     userAssignments
         .where("userEmail", isEqualTo: user.email)
         .where("eventDayForCalendar", isEqualTo: formatted)
@@ -50,7 +55,6 @@ class _CalendarPageState extends State<CalendarPage> {
               String taskName = doc["taskName"];
 
               tasks.add(taskName);
-
               // _events[_controller.selectedDay].add(taskName);
               // print('$formatted + $taskName');
             }));
@@ -89,7 +93,8 @@ class _CalendarPageState extends State<CalendarPage> {
               //Set default calendar format to week
               initialCalendarFormat: CalendarFormat.week,
               onDaySelected: (day, events) async {
-                getUserEvents();
+                await getUserEvents();
+                // Timer(Duration(seconds: 5), () {});
                 setState(() {
                   _selectedEvents = events;
                 });
@@ -110,21 +115,30 @@ class _CalendarPageState extends State<CalendarPage> {
                 centerHeaderTitle: true,
               ),
             ),
-            ..._selectedEvents.map((event) => SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    children: <Widget>[
-                      Card(
-                          child: ListTile(
-                        onTap: () {},
-                        title: Text(event),
-                        subtitle: Text(event),
-                        leading: Icon(Icons.assignment_turned_in),
-                        trailing: Icon(Icons.more_vert),
-                      ))
-                    ],
-                  ),
-                ))
+            // Column(children: tasks.map((i) => new Text(i.toString())).toList())
+            Column(
+                children: tasks
+                    .map((i) => new Card(
+                            child: ListTile(
+                          title: Text(i.toString()),
+                          leading: Icon(Icons.assignment_turned_in),
+                        )))
+                    .toList())
+            // ..._selectedEvents.map((event) => SingleChildScrollView(
+            //       scrollDirection: Axis.vertical,
+            //       child: Column(
+            //         children: <Widget>[
+            //           Card(
+            //               child: ListTile(
+            //             onTap: () {},
+            //             title: Text(event),
+            //             subtitle: Text(event),
+            //             leading: Icon(Icons.assignment_turned_in),
+            //             trailing: Icon(Icons.more_vert),
+            //           ))
+            //         ],
+            //       ),
+            //     ))
           ],
         ),
       ),
