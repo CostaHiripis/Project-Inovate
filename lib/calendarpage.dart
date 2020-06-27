@@ -18,6 +18,9 @@ class CalendarPage extends StatefulWidget {
 
 //This is the class in which you can initialize widgets
 class _CalendarPageState extends State<CalendarPage> {
+
+  NotificationsPage notificationsPage = new NotificationsPage();
+
   final DatabaseService _dbServices = DatabaseService();
   final AuthService _auth = AuthService();
   static bool alreadyLoaded = false;
@@ -30,9 +33,10 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void initState() {
     super.initState();
+    notificationsPage.initializing();
     _controller = CalendarController();
     _eventController = TextEditingController();
-    _eventDescriptionController = TextEditingController();
+    //_eventDescriptionController = TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_){_showAddDialog();});
 
     // This code is suppose to get all the
