@@ -27,47 +27,42 @@ class _CalendarPageState extends State<CalendarPage> {
   TextEditingController _eventController;
   List<dynamic> _selectedEvents;
 
-  // This code is suppose to get all the
-  Future<void> getUserEvents() async {
-    //We look for user with email that was given in login form
-    // if (alreadyLoaded == false) {
-    final CollectionReference userAssignments =
-        Firestore.instance.collection('userAssignments');
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    var formater = new DateFormat('yyyy-MM-dd');
-    String formatSelectedDay = formater.format(_controller.selectedDay);
-    userAssignments
-        .where("userEmail", isEqualTo: user.email)
-        .where("eventDayForCalendar", isEqualTo: formatSelectedDay)
-        .snapshots()
-        .listen((data) => data.documents.forEach((doc) {
-              DateTime eventDay = doc["eventDay"].toDate();
-
-              //We format date to string and we get only Year,Month and day
-              String formatted = formater.format(eventDay);
-              String taskName = doc["taskName"];
-              _events[_controller.selectedDay].add(_eventController.taskName);
-
-              // print('$formatted + $taskName');
-            }));
-    //   alreadyLoaded = true;
-    // }
-  }
-
   @override
   void initState() {
     super.initState();
     _controller = CalendarController();
     _eventController = TextEditingController();
+//    _eventDescriptionController = TextEditingController();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _showAddDialog();
-    });
+    // This code is suppose to get all the
+    Future<void> getUserEvents() async {
+      //We look for user with email that was given in login form
+      if (alreadyLoaded == false) {
+        final CollectionReference userAssignments =
+            Firestore.instance.collection('userAssignments');
+        FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+        userAssignments
+            .where("userEmail", isEqualTo: user.email)
+            .snapshots()
+            .listen((data) => data.documents.forEach((doc) {
+                  DateTime eventDay = doc["eventDay"].toDate();
+
+                  //We format date to string and we get only Year,Month and day
+                  var formater = new DateFormat('yyyy-MM-dd');
+                  String formatted = formater.format(eventDay);
+                  String taskName = doc["taskName"];
+                  print('$formatted + $taskName');
+                }));
+        alreadyLoaded = true;
+      }
+    }
 
     _selectedEvents = [];
     _events = {};
     // _selectedEventsDescription = [];
     // _finalEventList = {..._events, ..._eventDescriptions};
+    getUserEvents();
   }
 
 //This is the place in which all the widgets displayed are customized
@@ -87,8 +82,7 @@ class _CalendarPageState extends State<CalendarPage> {
               startingDayOfWeek: StartingDayOfWeek.monday,
               //Set default calendar format to week
               initialCalendarFormat: CalendarFormat.week,
-              onDaySelected: (day, events) async {
-                getUserEvents();
+              onDaySelected: (day, events) {
                 setState(() {
                   _selectedEvents = events;
                 });
@@ -130,91 +124,84 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
+        child: Icon(Icons.add),
           onPressed: () {
-            _showAddDialog();
-          }),
+              _showAddDialog();
+          }
+      ),
     );
   }
 
   _showAddDialog() {
     showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Creating new event:"),
-        content: Container(
-          constraints: BoxConstraints(
-            //Alert box min height without cause conflicts with the checkbox
-            maxHeight: 104,
-          ),
-          child: Column(
-            children: <Widget>[
-              TextField(
-                decoration: InputDecoration(hintText: "Event name"),
-                controller: _eventController,
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Creating new event:"),
+              content: Container(
+                constraints: BoxConstraints(
+                  //Alert box min height without cause conflicts with the checkbox
+                  maxHeight: 155,
+                ),
+                child: Column(
+                  children: <Widget>[
+                    TextField(
+                      decoration: InputDecoration(hintText: "Event name"),
+                      controller: _eventController,
+                    ),
+                    addForm()
+                  ],
+                ),
               ),
-              addForm()
-            ],
-          ),
-        ),
-        //Save button widget
-        actions: <Widget>[
-          FlatButton(
-            child: Text("Save"),
-            onPressed: () async {
-              setState(() async {
-                if (_events[_controller.selectedDay] != null) {
-                  _events[_controller.selectedDay].add(_eventController.text);
-                } else {
-                  //Create the event and push it to the database
-                  dynamic result = await _auth.createAnEvent(
-                      _eventController.text,
-                      DateTime.now(),
-                      _controller.selectedDay);
-                  // print(_controller.selectedDay);
+              //Save button widget
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Save"),
+                  onPressed: () async {
+                    setState(() async {
+                      if (_events[_controller.selectedDay] != null) {
+                        _events[_controller.selectedDay]
+                            .add(_eventController.text);
+                      } else {
+                        //Create the event and push it to the database
+                        dynamic result = await _auth.createAnEvent(
+                            _eventController.text,
+                            DateTime.now(),
+                            _controller.selectedDay);
+                        // print(_controller.selectedDay);
 
-                  _events[_controller.selectedDay] = [_eventController.text];
-                }
-                _eventController.clear();
-                Navigator.pop(context);
-              });
-            },
-          ),
-          FlatButton(
-            child: Text("Cancel"),
-            onPressed: Navigator.of(context).pop,
-          )
-        ],
-      ),
+                        _events[_controller.selectedDay] = [
+                          _eventController.text
+                        ];
+                      }
+                      _eventController.clear();
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+                FlatButton(
+                  child: Text("Cancel"),
+                  onPressed: Navigator.of(context).pop,
+                )
+              ],
+            ),
     );
   }
 }
-
 // ignore: camel_case_types
-class addForm extends StatefulWidget {
+class addForm extends StatefulWidget{
   @override
-  addCheckAndDrop createState() => new addCheckAndDrop();
+  addCheckAndDrop createState()=> new addCheckAndDrop();
 }
 
-class addCheckAndDrop extends State<addForm> {
+class addCheckAndDrop extends State<addForm>{
   String _currentItem = '1 hour';
   bool reminderCheck = false;
-  var DropDownItems = [
-    '15 minutes',
-    '30 minutes',
-    '1 hour',
-    '6 hours',
-    '1 day'
-  ];
+  var DropDownItems = ['15 minutes','30 minutes','1 hour','6 hours','1 day'];
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return     Container(
       child: Column(
         children: <Widget>[
           CheckboxListTile(
@@ -225,8 +212,8 @@ class addCheckAndDrop extends State<addForm> {
                 reminderCheck = newValue;
               });
             },
-            controlAffinity:
-                ListTileControlAffinity.leading, //  <-- leading Checkbox
+            controlAffinity: ListTileControlAffinity
+                .leading, //  <-- leading Checkbox
           ),
           DropdownButton<String>(
             value: _currentItem,

@@ -38,12 +38,11 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final List<Widget> _widgetOptions = [
     CalendarPage(),
-    NotificationsPage(),
     Rating(),
-    // SignoutScreen(),
+    SignoutScreen(),
   ];
   void _onItemTapped(int index) {
-    if (index == 3) {
+    if (index == 2) {
       setState(() {
         showDialog(
           context: context,
@@ -105,10 +104,6 @@ class _HomeScreenState extends State<HomeScreen> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.calendar_today),
                 title: Text('Calendar'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.notifications),
-                title: Text('Notifications'),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.star),
