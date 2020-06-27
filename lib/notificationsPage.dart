@@ -9,7 +9,7 @@ class NotificationsPage extends StatefulWidget {
   _NotificationsPageState createState() => _NotificationsPageState();
 }
 List<String> notifications = List<String>();
-var secondsTillNotification = 5;
+var secondsTillNotification = 10;
 
 List<String> getNotifications() {
   return notifications;
@@ -31,13 +31,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
     await notification();
   }
 
-Future<void> notification()async {
-
-AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('Channel_ID', 'Channel title', 'Channel body', importance: Importance.Max, priority: Priority.High, ticker: "test ticker");
-IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
-NotificationDetails notificationDetails = NotificationDetails(androidNotificationDetails, iosNotificationDetails);
-await flutterLocalNotificationsPlugin.show(0, 'Hello there', "my dude", notificationDetails);
-}
+  Future<void> notification()async {
+    var timeDelayed = DateTime.now().add(Duration(seconds: secondsTillNotification));
+    AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('Channel_ID', 'Channel title', 'channel body', priority: Priority.High, importance: Importance.Max, ticker: 'test');
+    IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
+    NotificationDetails notificationDetails = NotificationDetails(androidNotificationDetails, iosNotificationDetails);
+    await flutterLocalNotificationsPlugin.schedule(0, 'test','Is it working', timeDelayed, notificationDetails);
+  }
 
   @override
   void initState()
@@ -53,9 +53,9 @@ await flutterLocalNotificationsPlugin.show(0, 'Hello there', "my dude", notifica
     await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
   }
 
-  Future onSelectNotification(String payLoad){
-    if(payLoad!=null){
-      print(payLoad);
+  Future onSelectNotification(String payload) {
+    if(payload != null) {
+      print(payload);
     }
   }
 

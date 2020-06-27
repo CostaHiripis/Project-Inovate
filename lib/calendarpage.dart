@@ -18,7 +18,6 @@ class CalendarPage extends StatefulWidget {
 
 //This is the class in which you can initialize widgets
 class _CalendarPageState extends State<CalendarPage> {
-  NotificationsPage notifications = new NotificationsPage();
   final DatabaseService _dbServices = DatabaseService();
   final AuthService _auth = AuthService();
   static bool alreadyLoaded = false;
@@ -177,7 +176,6 @@ class _CalendarPageState extends State<CalendarPage> {
                       if (_events[_controller.selectedDay] != null) {
                         _events[_controller.selectedDay]
                             .add(_eventController.text);
-                        addNotifications(_eventController.text);
                       } else {
                         //Create the event and push it to the database
                         dynamic result = await _auth.createAnEvent(
