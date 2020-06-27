@@ -192,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         new MaterialPageRoute(
                                             builder: (context) =>
                                             new HomeScreen()));
-                                  });.catchError((e) => print(e));
+                                  }).catchError((e) => print(e));
 
                                 // if (Password.verify(
                                 //     password, _dbSearch.userPassword)) {

@@ -178,55 +178,14 @@ class _CalendarPageState extends State<CalendarPage> {
                       Navigator.pop(context);
                     });
                   },
+                ),
+                FlatButton(
+                  child: Text("Cancel"),
+                  onPressed: Navigator.of(context).pop,
                 )
               ],
             ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("Save"),
-              onPressed: () async {
-                setState(() async {
-                  if (_events[_controller.selectedDay] != null) {
-                    _events[_controller.selectedDay]
-                        .add(_eventController.text);
-                    addNotifications(_eventController.text);
-                  } else {
-                    // print(_controller.selectedDay);
-                    dynamic result = await _auth.createAnEvent(
-                        _eventController.text,
-                        DateTime.now(),
-                        _controller.selectedDay);
-                    _events[_controller.selectedDay] = [
-                      _eventController.text
-                    ];
-                  }
-                  _eventController.clear();
-                  Navigator.pop(context);
-                });
-
-                //Event description handler
-                if (_eventDescriptionController.text.isEmpty) return;
-                setState(() {
-                  if (_events[_controller.selectedDay] != null) {
-                    _events[_controller.selectedDay]
-                        .add(_eventDescriptionController.text);
-                  } else {
-                    _events[_controller.selectedDay] = [
-                      _eventDescriptionController.text
-                    ];
-                  }
-                  _eventController.clear();
-                  Navigator.pop(context);
-                });
-              },
-            ),
-            FlatButton(
-              child: Text("Cancel"),
-              onPressed: Navigator.of(context).pop,
-            )
-          ],
-        ));
+    );
   }
 }
 // ignore: camel_case_types
