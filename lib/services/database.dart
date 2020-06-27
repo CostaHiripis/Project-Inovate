@@ -72,7 +72,6 @@ class DatabaseService {
       String userEmail,
       DateTime postDate,
       DateTime eventDay,
-      bool completed,
       double rating,
       String experience,
       String eventDayForCalendar) async {
@@ -81,7 +80,6 @@ class DatabaseService {
       'userEmail': userEmail,
       'postDate': postDate,
       'eventDay': eventDay,
-      'completed': completed,
       'rating': rating,
       'experience': experience,
       'eventDayForCalendar': eventDayForCalendar

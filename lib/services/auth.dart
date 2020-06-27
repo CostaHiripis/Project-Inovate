@@ -84,7 +84,7 @@ class AuthService {
       String formatted = formater.format(eventDate);
 
       await DatabaseService(uid: rndString).addEvent(
-          taskName, user.email, postDate, eventDate, false, 0, '', formatted);
+          taskName, user.email, postDate, eventDate, 0, '', formatted);
     } catch (err) {
       print(err.toString());
       return null;
