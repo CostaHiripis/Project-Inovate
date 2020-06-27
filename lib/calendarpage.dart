@@ -29,24 +29,13 @@ class _CalendarPageState extends State<CalendarPage> {
   TextEditingController _eventDescriptionController;
   List<dynamic> _selectedEvents;
 
-  bool reminderCheck = false;
-
-  void _reminderCheckChanged(bool newValue) => setState(() {
-        reminderCheck = newValue;
-
-        if (reminderCheck) {
-          // TODO: enable reminders.
-        } else {
-          // TODO: disable reminders
-        }
-      });
-
   @override
   void initState() {
     super.initState();
     _controller = CalendarController();
     _eventController = TextEditingController();
     _eventDescriptionController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_){_showAddDialog();});
 
     // This code is suppose to get all the
     Future<void> getUserEvents() async {
@@ -139,7 +128,9 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: _showAddDialog,
+          onPressed: () {
+              _showAddDialog();
+          }
       ),
     );
   }
@@ -148,69 +139,119 @@ class _CalendarPageState extends State<CalendarPage> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: Text("Creating new event:"),
-              content: Container(
-                constraints: BoxConstraints(
-                  maxHeight: 155.0,
+          title: Text("Creating new event:"),
+          content: Container(
+            constraints: BoxConstraints(
+              maxHeight: 155.0,
+            ),
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  decoration: InputDecoration(hintText: "Event name"),
+                  controller: _eventController,
                 ),
-                child: Column(
-                  children: <Widget>[
-                    TextField(
-                      decoration: InputDecoration(hintText: "Event name"),
-                      controller: _eventController,
-                    ),
-                    CheckboxListTile(
-                      title: Text("Enable reminders"),
-                      value: reminderCheck,
-                      onChanged: _reminderCheckChanged,
-                      controlAffinity: ListTileControlAffinity
-                          .leading, //  <-- leading Checkbox
-                    ),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text("Save"),
-                  onPressed: () async {
-                    setState(() async {
-                      if (_events[_controller.selectedDay] != null) {
-                        _events[_controller.selectedDay]
-                            .add(_eventController.text);
-                        addNotifications(_eventController.text);
-                      } else {
-                        // print(_controller.selectedDay);
-                        dynamic result = await _auth.createAnEvent(
-                            _eventController.text,
-                            DateTime.now(),
-                            _controller.selectedDay);
-                        _events[_controller.selectedDay] = [
-                          _eventController.text
-                        ];
-                      }
-                      _eventController.clear();
-                      Navigator.pop(context);
-                    });
-
-                    //Event description handler
-                    if (_eventDescriptionController.text.isEmpty) return;
-                    setState(() {
-                      if (_events[_controller.selectedDay] != null) {
-                        _events[_controller.selectedDay]
-                            .add(_eventDescriptionController.text);
-                      } else {
-                        _events[_controller.selectedDay] = [
-                          _eventDescriptionController.text
-                        ];
-                      }
-                      _eventController.clear();
-                      Navigator.pop(context);
-                    });
-                  },
-                )
+                addForm()
               ],
-            ));
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Save"),
+              onPressed: () async {
+                setState(() async {
+                  if (_events[_controller.selectedDay] != null) {
+                    _events[_controller.selectedDay]
+                        .add(_eventController.text);
+                    addNotifications(_eventController.text);
+                  } else {
+                    // print(_controller.selectedDay);
+                    dynamic result = await _auth.createAnEvent(
+                        _eventController.text,
+                        DateTime.now(),
+                        _controller.selectedDay);
+                    _events[_controller.selectedDay] = [
+                      _eventController.text
+                    ];
+                  }
+                  _eventController.clear();
+                  Navigator.pop(context);
+                });
+
+                //Event description handler
+                if (_eventDescriptionController.text.isEmpty) return;
+                setState(() {
+                  if (_events[_controller.selectedDay] != null) {
+                    _events[_controller.selectedDay]
+                        .add(_eventDescriptionController.text);
+                  } else {
+                    _events[_controller.selectedDay] = [
+                      _eventDescriptionController.text
+                    ];
+                  }
+                  _eventController.clear();
+                  Navigator.pop(context);
+                });
+              },
+            ),
+            FlatButton(
+              child: Text("Cancel"),
+              onPressed: Navigator.of(context).pop,
+            )
+          ],
+        ));
   }
 }
+// ignore: camel_case_types
+class addForm extends StatefulWidget{
+  @override
+  addCheckAndDrop createState()=> new addCheckAndDrop();
+}
 
-class showEvenNotification {}
+class addCheckAndDrop extends State<addForm>{
+  String _currentItem = '1 hour';
+  bool reminderCheck = false;
+  var DropDownItems = ['15 minutes','30 minutes','1 hour','6 hours','1 day'];
+
+
+  @override
+  void initState(){
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return     Container(
+      child: Column(
+        children: <Widget>[
+          CheckboxListTile(
+            title: Text("Enable reminders"),
+            value: reminderCheck,
+            onChanged: (bool newValue) {
+              setState(() {
+                reminderCheck = newValue;
+              });
+            },
+            controlAffinity: ListTileControlAffinity
+                .leading, //  <-- leading Checkbox
+          ),
+          DropdownButton<String>(
+            value: _currentItem,
+            items: DropDownItems.map((String dropDownStringItem) {
+              return DropdownMenuItem<String>(
+                value: dropDownStringItem,
+                child: Text(dropDownStringItem),
+              );
+            }).toList(),
+            onChanged: (newValue) {
+              setState(() {
+                _currentItem = newValue;
+              });
+              print(newValue);
+              print(_currentItem);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
