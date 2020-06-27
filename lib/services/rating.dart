@@ -1,8 +1,28 @@
+import 'dart:async';
+
+import 'package:CheckOff/app.dart';
+import 'package:CheckOff/calendarpage.dart';
 import 'package:CheckOff/services/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class Rating extends StatefulWidget {
+  final String passedDayOfEvent;
+  final String documentID;
+  final String taskName;
+  final String userEmail;
+  final Timestamp eventDay;
+  final Timestamp postDate;
+  Rating(
+      {this.passedDayOfEvent,
+      this.documentID,
+      this.taskName,
+      this.userEmail,
+      this.eventDay,
+      this.postDate});
   @override
   _RatingState createState() => _RatingState();
 }
@@ -13,6 +33,23 @@ class _RatingState extends State<Rating> {
 
   String feedback = '';
   SmoothStarRating stars = new SmoothStarRating();
+  void checkIfAssignmentWasCompleted() {
+//We get Collection of 'userAssignments' from database
+    final CollectionReference userAssignments =
+        Firestore.instance.collection('userAssignments');
+
+    userAssignments.document(this.widget.documentID).setData({
+      'experience': this.feedback,
+      'completed': true,
+      'documentID': this.widget.documentID,
+      'taskName': this.widget.taskName,
+      'userEmail': this.widget.userEmail,
+      'eventDayForCalendar': this.widget.passedDayOfEvent,
+      'eventDay': this.widget.eventDay,
+      'postDate': this.widget.postDate,
+      'rating': this.rating
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +114,16 @@ class _RatingState extends State<Rating> {
               height: 40,
             ),
             RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  checkIfAssignmentWasCompleted();
+                  Timer(Duration(seconds: 1), () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                      (Route<dynamic> route) => false,
+                    );
+                  });
+                },
                 child: Text('Post', style: TextStyle(color: Colors.black))),
             // Container(
             //   child: Text("" + auth.returnCurrentUser()),

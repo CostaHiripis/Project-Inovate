@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:CheckOff/login.dart';
 import 'package:CheckOff/notificationsPage.dart';
 import 'package:CheckOff/services/auth.dart';
 import 'package:CheckOff/services/database.dart';
+import 'package:CheckOff/services/rating.dart';
+import 'package:CheckOff/testpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +29,15 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   final DatabaseService _dbServices = DatabaseService();
   final AuthService _auth = AuthService();
-  static bool alreadyLoaded = false;
+
+  //All the variables that we pass to rating constructor
+  bool checkIfCompleted;
+  String idOfDocument;
+  String checkedTaskName;
+  String checkedUserEmail;
+  Timestamp checkedPostDate;
+  Timestamp checkedEventDay;
+  String checkedFormattedDay;
 
   //This List stores all found tasks while conducting a getUserEvents()
   List<String> tasks = new List<String>();
@@ -72,6 +83,38 @@ class _CalendarPageState extends State<CalendarPage> {
             }));
   }
 
+  Future<void> checkIfAssignmentWasCompleted(String taskName) async {
+//We get Collection of 'userAssignments' from database
+    final CollectionReference userAssignments =
+        Firestore.instance.collection('userAssignments');
+
+    //We get current logged in user
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    //This is used to format a DateTime of selected day to String 'yyyy-MM-dd'
+    var formater = new DateFormat('yyyy-MM-dd');
+    checkedFormattedDay = formater.format(_controller.selectedDay);
+
+    //This is a query, We loop through entire collection and we look for a document
+    // with email of logged in user and we look for a day that is
+    // equal to selected formated day (variable formatted)
+
+    userAssignments
+        .where("userEmail", isEqualTo: user.email)
+        .where("eventDayForCalendar", isEqualTo: checkedFormattedDay)
+        .where("taskName", isEqualTo: taskName)
+        .snapshots()
+        .listen((data) => data.documents.forEach((doc) {
+              checkIfCompleted = doc["completed"];
+              idOfDocument = doc["documentID"];
+              checkedTaskName = doc['taskName'];
+              checkedUserEmail = doc['userEmail'];
+              checkedPostDate = doc['postDate'];
+              checkedEventDay = doc['eventDay'];
+              checkedFormattedDay = doc['eventDayForCalendar'];
+            }));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -105,6 +148,7 @@ class _CalendarPageState extends State<CalendarPage> {
               initialCalendarFormat: CalendarFormat.week,
               onDaySelected: (day, events) async {
                 await getUserEvents();
+
                 setState(() {
                   _selectedEvents = events;
                 });
@@ -130,6 +174,55 @@ class _CalendarPageState extends State<CalendarPage> {
                     .map((i) => new Card(
                             child: ListTile(
                           title: Text(i.toString()),
+                          onTap: () async {
+                            await checkIfAssignmentWasCompleted(i.toString());
+                            Timer(Duration(seconds: 1), () async {
+                              if (checkIfCompleted == false) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text(
+                                        'Do you want to mark it as completed?'),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('No'),
+                                      ),
+                                      FlatButton(
+                                        onPressed: () async {
+                                          Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => Rating(
+                                                      passedDayOfEvent:
+                                                          checkedFormattedDay,
+                                                      documentID: idOfDocument,
+                                                      taskName: checkedTaskName,
+                                                      userEmail:
+                                                          checkedUserEmail,
+                                                      eventDay: checkedEventDay,
+                                                      postDate: checkedPostDate,
+                                                    )),
+                                            (Route<dynamic> route) => false,
+                                          );
+                                        },
+                                        child: Text('Yes'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => TestPage()),
+                                  (Route<dynamic> route) => true,
+                                );
+                              }
+                            });
+                          },
                           leading: Icon(Icons.assignment_turned_in),
                         )))
                     .toList())

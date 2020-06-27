@@ -83,8 +83,8 @@ class AuthService {
       var formater = new DateFormat('yyyy-MM-dd');
       String formatted = formater.format(eventDate);
 
-      await DatabaseService(uid: rndString).addEvent(
-          taskName, user.email, postDate, eventDate, 0, '', formatted);
+      await DatabaseService(uid: rndString).addEvent(rndString, taskName,
+          user.email, postDate, eventDate, 0, '', formatted, false);
     } catch (err) {
       print(err.toString());
       return null;

@@ -68,21 +68,25 @@ class DatabaseService {
 
 //Add an event
   Future<void> addEvent(
+      String documentID,
       String taskName,
       String userEmail,
       DateTime postDate,
       DateTime eventDay,
       double rating,
       String experience,
-      String eventDayForCalendar) async {
+      String eventDayForCalendar,
+      bool checkIfCompleted) async {
     return await userAssignments.document(uid).setData({
+      'documentID': documentID,
       'taskName': taskName,
       'userEmail': userEmail,
       'postDate': postDate,
       'eventDay': eventDay,
       'rating': rating,
       'experience': experience,
-      'eventDayForCalendar': eventDayForCalendar
+      'eventDayForCalendar': eventDayForCalendar,
+      'completed': checkIfCompleted
     });
   }
 
