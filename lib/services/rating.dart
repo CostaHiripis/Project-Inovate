@@ -9,7 +9,7 @@ class Rating extends StatefulWidget {
 
 class _RatingState extends State<Rating> {
   var rating = 3.0;
-  Auth auth = new Auth();
+  // Auth auth = new Auth();
 
   String feedback = '';
   SmoothStarRating stars = new SmoothStarRating();

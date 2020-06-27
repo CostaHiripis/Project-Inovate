@@ -16,14 +16,27 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String email = '';
   String password = '';
-  // FirebaseUser user;
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  final DbSearch _dbSearch = DbSearch();
+  // final DbSearch _dbSearch = DbSearch();
+  final DatabaseService _dbServices = DatabaseService();
+
   final _formKey = GlobalKey<FormState>();
   String error = '';
-  var authHandler = new Auth();
+  // var authHandler = new Auth();
+  var auth = new AuthService();
+
   @override
   Widget build(BuildContext context) {
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (FirebaseAuth.instance.currentUser() != null) {
+    //     Navigator.pushAndRemoveUntil(
+    //       context,
+    //       MaterialPageRoute(builder: (context) => HomeScreen()),
+    //           (Route<dynamic> route) => false,
+    //     );
+    //   }
+    // });
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -164,34 +177,36 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             //---------\\LOGIN CODE HERE\\----------
 
-                            _dbSearch.getUserAccount(email.replaceAll(
-                                new RegExp(r"\s+\b|\b\s"), ""));
+                            // _dbSearch.getUserAccount(email.replaceAll(
+                            //     new RegExp(r"\s+\b|\b\s"), ""));
                             //We have to wait around one second for function to find email account
 
                             Timer(Duration(seconds: 1), () {
-                              if (_dbSearch.userPassword.isEmpty) {
-                                print("no user found");
+                              if (email.length == 0) {
+                                print("Field for email is empty");
                               } else {
-                                if (Password.verify(
-                                    password, _dbSearch.userPassword)) {
+                                auth
+                                    .handleSignInEmail(email, password)
+                                    .then((FirebaseUser user) {
                                   Navigator.push(
                                       context,
                                       new MaterialPageRoute(
                                           builder: (context) =>
                                               new HomeScreen()));
-                                } else {
-                                  print("Wrong password");
-                                }
+                                }).catchError((e) => print(e));
+
+                                // if (Password.verify(
+                                //     password, _dbSearch.userPassword)) {
+                                //   Navigator.push(
+                                //       context,
+                                //       new MaterialPageRoute(
+                                //           builder: (context) =>
+                                //               new HomeScreen()));
+                                // } else {
+                                //   print("Wrong password");
+                                // }
                               }
                             });
-                            // authHandler
-                            //     .handleSignInEmail(email, password)
-                            //     .then((FirebaseUser user) {
-                            //   Navigator.push(
-                            //       context,
-                            //       new MaterialPageRoute(
-                            //           builder: (context) => new MainScreen()));
-                            // }).catchError((e) => print(e));
                           },
                           color: Colors.cyan,
                           textColor: Colors.white,

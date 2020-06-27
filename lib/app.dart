@@ -1,10 +1,12 @@
-import 'package:CheckOff/timerpage.dart';
+import 'package:CheckOff/services/auth.dart';
+import 'package:CheckOff/signout.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'calendarpage.dart';
 import 'login.dart';
 import 'notificationsPage.dart';
 import 'services/rating.dart';
+import 'signout.dart';
 
 void main() => runApp(App());
 
@@ -23,6 +25,7 @@ class App extends StatelessWidget {
     );
   }
 }
+
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
 
@@ -31,21 +34,58 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  var _auth = new AuthService();
   int _selectedIndex = 0;
   final List<Widget> _widgetOptions = [
     CalendarPage(),
     NotificationsPage(),
-    Rating()
+    Rating(),
+    // SignoutScreen(),
   ];
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index == 3) {
+      setState(() {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Do you want to exit this application?'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('No'),
+              ),
+              FlatButton(
+                onPressed: () async {
+                  _auth.signOut();
+                  CalendarPage calendarPage = CalendarPage();
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: Text('Yes'),
+              ),
+            ],
+          ),
+        );
+      });
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(0),
+          child: AppBar(),
+        ),
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
@@ -74,6 +114,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icon(Icons.star),
                 title: Text('Ratings'),
               ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.all_out),
+                title: Text('Signout'),
+              ),
             ],
             currentIndex: _selectedIndex,
             selectedItemColor: Colors.white,
@@ -83,3 +127,4 @@ class _HomeScreenState extends State<HomeScreen> {
         ));
   }
 }
+//
