@@ -7,10 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import "package:table_calendar/table_calendar.dart";
 import 'notificationsPage.dart';
-import 'package:CheckOff/services/database.dart';
 
 final DatabaseService _databaseService = DatabaseService();
-final DbSearch _dbSearch = DbSearch();
 
 //This is the root container for the entire screen, it accepts StfWidg
 class CalendarPage extends StatefulWidget {
@@ -47,7 +45,6 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
     _controller = CalendarController();
     _eventController = TextEditingController();
-    _eventDescriptionController = TextEditingController();
 
     // This code is suppose to get all the
     Future<void> getUserEvents() async {
@@ -73,7 +70,6 @@ class _CalendarPageState extends State<CalendarPage> {
     }
 
     _selectedEvents = [];
-    _eventDescriptions = {};
     _events = {};
     // _selectedEventsDescription = [];
     // _finalEventList = {..._events, ..._eventDescriptions};
