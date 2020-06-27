@@ -10,7 +10,7 @@ import 'notificationsPage.dart';
 import 'package:CheckOff/services/database.dart';
 
 final DatabaseService _databaseService = DatabaseService();
-final DbSearch _dbSearch = DbSearch();
+// final DbSearch _dbSearch = DbSearch();
 
 //This is the root container for the entire screen, it accepts StfWidg
 class CalendarPage extends StatefulWidget {
@@ -47,7 +47,7 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
     _controller = CalendarController();
     _eventController = TextEditingController();
-    _eventDescriptionController = TextEditingController();
+    // _eventDescriptionController = TextEditingController();
 
     // This code is suppose to get all the
     Future<void> getUserEvents() async {
@@ -67,13 +67,14 @@ class _CalendarPageState extends State<CalendarPage> {
                   var formater = new DateFormat('yyyy-MM-dd');
                   String formatted = formater.format(eventDay);
                   String taskName = doc["taskName"];
+                  print('$formatted + $taskName');
                 }));
         alreadyLoaded = true;
       }
     }
 
     _selectedEvents = [];
-    _eventDescriptions = {};
+    // _eventDescriptions = {};
     _events = {};
     // _selectedEventsDescription = [];
     // _finalEventList = {..._events, ..._eventDescriptions};
@@ -188,6 +189,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             DateTime.now(),
                             _controller.selectedDay);
                         // print(_controller.selectedDay);
+
                         _events[_controller.selectedDay] = [
                           _eventController.text
                         ];
