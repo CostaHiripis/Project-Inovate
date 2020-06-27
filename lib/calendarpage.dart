@@ -26,11 +26,42 @@ class _CalendarPageState extends State<CalendarPage> {
   final DatabaseService _dbServices = DatabaseService();
   final AuthService _auth = AuthService();
   static bool alreadyLoaded = false;
-
+  List<String> tasks = new List<String>();
+  final _formKey = GlobalKey<FormState>();
   CalendarController _controller;
   Map<DateTime, List<dynamic>> _events;
   TextEditingController _eventController;
   List<dynamic> _selectedEvents;
+
+  // This code is suppose to get all the
+  Future<void> getUserEvents() async {
+    //We look for user with email that was given in login form
+    // if (alreadyLoaded == false) {
+    final CollectionReference userAssignments =
+        Firestore.instance.collection('userAssignments');
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    var formater = new DateFormat('yyyy-MM-dd');
+    String formatted = formater.format(_controller.selectedDay);
+
+    userAssignments
+        .where("userEmail", isEqualTo: user.email)
+        .where("eventDayForCalendar", isEqualTo: formatted)
+        .snapshots()
+        .listen((data) => data.documents.forEach((doc) {
+              DateTime eventDay = doc["eventDay"].toDate();
+
+              //We format date to string and we get only Year,Month and day
+              String formatted = formater.format(eventDay);
+              String taskName = doc["taskName"];
+
+              tasks.add(taskName);
+
+              // _events[_controller.selectedDay].add(taskName);
+              // print('$formatted + $taskName');
+            }));
+    // alreadyLoaded = true;
+    // }
+  }
 
   @override
   void initState() {
@@ -40,35 +71,10 @@ class _CalendarPageState extends State<CalendarPage> {
     _eventController = TextEditingController();
 //    _eventDescriptionController = TextEditingController();
 
-    // This code is suppose to get all the
-    Future<void> getUserEvents() async {
-      //We look for user with email that was given in login form
-      if (alreadyLoaded == false) {
-        final CollectionReference userAssignments =
-            Firestore.instance.collection('userAssignments');
-        FirebaseUser user = await FirebaseAuth.instance.currentUser();
-
-        userAssignments
-            .where("userEmail", isEqualTo: user.email)
-            .snapshots()
-            .listen((data) => data.documents.forEach((doc) {
-                  DateTime eventDay = doc["eventDay"].toDate();
-
-                  //We format date to string and we get only Year,Month and day
-                  var formater = new DateFormat('yyyy-MM-dd');
-                  String formatted = formater.format(eventDay);
-                  taskName = doc["taskName"];
-                  print('$formatted + $taskName');
-                }));
-        alreadyLoaded = true;
-      }
-    }
-
     _selectedEvents = [];
     _events = {};
     // _selectedEventsDescription = [];
     // _finalEventList = {..._events, ..._eventDescriptions};
-    getUserEvents();
   }
 
 //This is the place in which all the widgets displayed are customized
@@ -88,7 +94,8 @@ class _CalendarPageState extends State<CalendarPage> {
               startingDayOfWeek: StartingDayOfWeek.monday,
               //Set default calendar format to week
               initialCalendarFormat: CalendarFormat.week,
-              onDaySelected: (day, events) {
+              onDaySelected: (day, events) async {
+                getUserEvents();
                 setState(() {
                   _selectedEvents = events;
                 });
@@ -109,108 +116,113 @@ class _CalendarPageState extends State<CalendarPage> {
                 centerHeaderTitle: true,
               ),
             ),
-            // ..._finalEventList.map((event, description) => SingleChildScrollView(
-            //       scrollDirection: Axis.vertical,
-            //       child: Column(
-            //         children: <Widget>[
-            //           Card(
-            //               child: ListTile(
-            //             onTap: () {},
-            //             title: Text(event),
-
-            //             subtitle: Text(event),
-
-            //             leading: Icon(Icons.assignment_turned_in),
-            //             trailing: Icon(Icons.more_vert),
-            //           ))
-            //         ],
-            //       ),
-            //     ))
+            ..._selectedEvents.map((event) => SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: <Widget>[
+                      Card(
+                          child: ListTile(
+                        onTap: () {},
+                        title: Text(event),
+                        subtitle: Text(event),
+                        leading: Icon(Icons.assignment_turned_in),
+                        trailing: Icon(Icons.more_vert),
+                      ))
+                    ],
+                  ),
+                ))
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+          child: Icon(Icons.add),
           onPressed: () {
-              _showAddDialog();
-          }
-      ),
+            _showAddDialog();
+          }),
     );
   }
 
   _showAddDialog() {
     showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text("Creating new event:"),
-              content: Container(
-                constraints: BoxConstraints(
-                  //Alert box min height without cause conflicts with the checkbox
-                  maxHeight: 155,
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Creating new event:"),
+        content: Container(
+          constraints: BoxConstraints(
+            //Alert box min height without cause conflicts with the checkbox
+            maxHeight: 185,
+          ),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  controller: _eventController,
+                  validator: (val) =>
+                      val.isEmpty ? 'Enter an event name' : null,
+                  decoration: InputDecoration(
+                    hintText: "Event name",
+                  ),
                 ),
-                child: Column(
-                  children: <Widget>[
-                    TextField(
-                      decoration: InputDecoration(hintText: "Event name"),
-                      controller: _eventController,
-                    ),
-                    addForm()
-                  ],
-                ),
-              ),
-              //Save button widget
-              actions: <Widget>[
-                FlatButton(
-                  child: Text("Save"),
-                  onPressed: () async {
-                    setState(() async {
-                      if (_events[_controller.selectedDay] != null) {
-                        _events[_controller.selectedDay]
-                            .add(_eventController.text);
-
-                            notificationsPage.secondsTillNotification = reminderTimeInSeconds;
-                            notificationsPage.showNotification('You got work to do', _eventController.text);
-                      } else {
-                        //Create the event and push it to the database
-                        dynamic result = await _auth.createAnEvent(
-                            _eventController.text,
-                            DateTime.now(),
-                            _controller.selectedDay);
-                        // print(_controller.selectedDay);
-
-                        _events[_controller.selectedDay] = [
-                          _eventController.text
-                        ];
-                      }
-                      _eventController.clear();
-                      Navigator.pop(context);
-                    });
-                  },
-                ),
-                FlatButton(
-                  child: Text("Cancel"),
-                  onPressed: Navigator.of(context).pop,
-                )
+                addForm()
               ],
             ),
+          ),
+        ),
+        //Save button widget
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Save"),
+            onPressed: () async {
+              setState(() async {
+                if (_formKey.currentState.validate()) {
+                  if (_events[_controller.selectedDay] != null) {
+                    _events[_controller.selectedDay].add(_eventController.text);
+                  } else {
+                    //Create the event and push it to the database
+                    dynamic result = await _auth.createAnEvent(
+                        _eventController.text,
+                        DateTime.now(),
+                        _controller.selectedDay);
+                    // print(_controller.selectedDay);
+
+                    _events[_controller.selectedDay] = [_eventController.text];
+                  }
+                  _eventController.clear();
+                  Navigator.pop(context);
+                }
+              });
+            },
+          ),
+          FlatButton(
+            child: Text("Cancel"),
+            onPressed: Navigator.of(context).pop,
+          )
+        ],
+      ),
     );
   }
 }
+
 // ignore: camel_case_types
-class addForm extends StatefulWidget{
+class addForm extends StatefulWidget {
   @override
-  addCheckAndDrop createState()=> new addCheckAndDrop();
+  addCheckAndDrop createState() => new addCheckAndDrop();
 }
 
-class addCheckAndDrop extends State<addForm>{
-  String _currentItem = '15 minutes'; 
+class addCheckAndDrop extends State<addForm> {
+  String _currentItem = '1 hour';
   bool reminderCheck = false;
-  var DropDownItems = ['15 minutes','30 minutes','1 hour','6 hours','1 day'];
-
-
+  var DropDownItems = [
+    '15 minutes',
+    '30 minutes',
+    '1 hour',
+    '6 hours',
+    '1 day'
+  ];
   @override
   Widget build(BuildContext context) {
-    return     Container(
+    return Container(
       child: Column(
         children: <Widget>[
           CheckboxListTile(
@@ -221,8 +233,8 @@ class addCheckAndDrop extends State<addForm>{
                 reminderCheck = newValue;
               });
             },
-            controlAffinity: ListTileControlAffinity
-                .leading, //  <-- leading Checkbox
+            controlAffinity:
+                ListTileControlAffinity.leading, //  <-- leading Checkbox
           ),
           DropdownButton<String>(
             value: _currentItem,
@@ -232,31 +244,9 @@ class addCheckAndDrop extends State<addForm>{
                 child: Text(dropDownStringItem),
               );
             }).toList(),
-            onChanged: (newValue) {
-              setState(() {
-                _currentItem = newValue;
-                
-                switch (_currentItem) {
-                  case '15 minutes':
-                  reminderTimeInSeconds = 900;
-                  break;
-                  case '30 minutes':
-                  reminderTimeInSeconds = 1800;
-                  break;
-                  case '1 hour':
-                  reminderTimeInSeconds = 3600;
-                  break;
-                  case '6 hours':
-                  reminderTimeInSeconds = 21600;
-                  break;
-                  case '1 day':
-                  reminderTimeInSeconds = 86400;
-                  break;
-                }
-              });
-              print(newValue);
-              print(_currentItem);
-            },
+            onChanged: reminderCheck
+                ? (newValue) => setState(() => _currentItem = newValue)
+                : null,
           ),
         ],
       ),
