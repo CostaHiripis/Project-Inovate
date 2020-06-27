@@ -203,7 +203,6 @@ class addCheckAndDrop extends State<addForm> {
     '6 hours',
     '1 day'
   ];
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -228,13 +227,9 @@ class addCheckAndDrop extends State<addForm> {
                 child: Text(dropDownStringItem),
               );
             }).toList(),
-            onChanged: (newValue) {
-              setState(() {
-                _currentItem = newValue;
-              });
-              print(newValue);
-              print(_currentItem);
-            },
+            onChanged: reminderCheck
+                ? (newValue) => setState(() => _currentItem = newValue)
+                : null,
           ),
         ],
       ),
