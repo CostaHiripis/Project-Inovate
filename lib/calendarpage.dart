@@ -22,6 +22,7 @@ class _CalendarPageState extends State<CalendarPage> {
   final AuthService _auth = AuthService();
   static bool alreadyLoaded = false;
   List<String> tasks = new List<String>();
+  final _formKey = GlobalKey<FormState>();
   CalendarController _controller;
   Map<DateTime, List<dynamic>> _events;
   TextEditingController _eventController;
@@ -143,16 +144,23 @@ class _CalendarPageState extends State<CalendarPage> {
         content: Container(
           constraints: BoxConstraints(
             //Alert box min height without cause conflicts with the checkbox
-            maxHeight: 155,
+            maxHeight: 185,
           ),
-          child: Column(
-            children: <Widget>[
-              TextField(
-                decoration: InputDecoration(hintText: "Event name"),
-                controller: _eventController,
-              ),
-              addForm()
-            ],
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  controller: _eventController,
+                  validator: (val) =>
+                      val.isEmpty ? 'Enter an event name' : null,
+                  decoration: InputDecoration(
+                    hintText: "Event name",
+                  ),
+                ),
+                addForm()
+              ],
+            ),
           ),
         ),
         //Save button widget
@@ -161,20 +169,22 @@ class _CalendarPageState extends State<CalendarPage> {
             child: Text("Save"),
             onPressed: () async {
               setState(() async {
-                if (_events[_controller.selectedDay] != null) {
-                  _events[_controller.selectedDay].add(_eventController.text);
-                } else {
-                  //Create the event and push it to the database
-                  dynamic result = await _auth.createAnEvent(
-                      _eventController.text,
-                      DateTime.now(),
-                      _controller.selectedDay);
-                  // print(_controller.selectedDay);
+                if (_formKey.currentState.validate()) {
+                  if (_events[_controller.selectedDay] != null) {
+                    _events[_controller.selectedDay].add(_eventController.text);
+                  } else {
+                    //Create the event and push it to the database
+                    dynamic result = await _auth.createAnEvent(
+                        _eventController.text,
+                        DateTime.now(),
+                        _controller.selectedDay);
+                    // print(_controller.selectedDay);
 
-                  _events[_controller.selectedDay] = [_eventController.text];
+                    _events[_controller.selectedDay] = [_eventController.text];
+                  }
+                  _eventController.clear();
+                  Navigator.pop(context);
                 }
-                _eventController.clear();
-                Navigator.pop(context);
               });
             },
           ),
