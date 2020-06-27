@@ -73,7 +73,7 @@ class AuthService {
     }
   }
 
-// create and event
+  // create an event
   Future createAnEvent(
       String taskName, DateTime postDate, DateTime eventDate) async {
     try {
@@ -81,7 +81,7 @@ class AuthService {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
       await DatabaseService(uid: rndString)
-          .addEvent(taskName, user.email, postDate, eventDate);
+          .addEvent(taskName, user.email, postDate, eventDate, false, 0, '');
     } catch (err) {
       print(err.toString());
       return null;

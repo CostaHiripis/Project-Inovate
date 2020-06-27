@@ -8,6 +8,8 @@ import 'package:intl/intl.dart';
 import "package:table_calendar/table_calendar.dart";
 import 'notificationsPage.dart';
 
+final DatabaseService _databaseService = DatabaseService();
+
 //This is the root container for the entire screen, it accepts StfWidg
 class CalendarPage extends StatefulWidget {
   @override
@@ -16,17 +18,13 @@ class CalendarPage extends StatefulWidget {
 
 //This is the class in which you can initialize widgets
 class _CalendarPageState extends State<CalendarPage> {
-  NotificationsPage notifications = new NotificationsPage();
   final DatabaseService _dbServices = DatabaseService();
   final AuthService _auth = AuthService();
   static bool alreadyLoaded = false;
 
   CalendarController _controller;
   Map<DateTime, List<dynamic>> _events;
-  Map<DateTime, List<dynamic>> _eventDescriptions;
-  Map<DateTime, List<dynamic>> _finalEventList;
   TextEditingController _eventController;
-  TextEditingController _eventDescriptionController;
   List<dynamic> _selectedEvents;
 
   @override
@@ -55,13 +53,13 @@ class _CalendarPageState extends State<CalendarPage> {
                   var formater = new DateFormat('yyyy-MM-dd');
                   String formatted = formater.format(eventDay);
                   String taskName = doc["taskName"];
+                  print('$formatted + $taskName');
                 }));
         alreadyLoaded = true;
       }
     }
 
     _selectedEvents = [];
-    _eventDescriptions = {};
     _events = {};
     // _selectedEventsDescription = [];
     // _finalEventList = {..._events, ..._eventDescriptions};
@@ -107,22 +105,22 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             ),
             // ..._finalEventList.map((event, description) => SingleChildScrollView(
-//                   scrollDirection: Axis.vertical,
-//                   child: Column(
-//                     children: <Widget>[
-//                       Card(
-//                           child: ListTile(
-//                         onTap: () {},
-//                         title: Text(event),
-//
-//                         subtitle: Text(event),
-//
-//                         leading: Icon(Icons.assignment_turned_in),
-//                         trailing: Icon(Icons.more_vert),
-//                       ))
-//                     ],
-//                   ),
-//                 ))
+            //       scrollDirection: Axis.vertical,
+            //       child: Column(
+            //         children: <Widget>[
+            //           Card(
+            //               child: ListTile(
+            //             onTap: () {},
+            //             title: Text(event),
+
+            //             subtitle: Text(event),
+
+            //             leading: Icon(Icons.assignment_turned_in),
+            //             trailing: Icon(Icons.more_vert),
+            //           ))
+            //         ],
+            //       ),
+            //     ))
           ],
         ),
       ),
@@ -139,18 +137,48 @@ class _CalendarPageState extends State<CalendarPage> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Creating new event:"),
-          content: Container(
-            constraints: BoxConstraints(
-              maxHeight: 155.0,
-            ),
-            child: Column(
-              children: <Widget>[
-                TextField(
-                  decoration: InputDecoration(hintText: "Event name"),
-                  controller: _eventController,
+              title: Text("Creating new event:"),
+              content: Container(
+                constraints: BoxConstraints(
+                  //Alert box min height without cause conflicts with the checkbox
+                  maxHeight: 104,
                 ),
-                addForm()
+                child: Column(
+                  children: <Widget>[
+                    TextField(
+                      decoration: InputDecoration(hintText: "Event name"),
+                      controller: _eventController,
+                    ),
+                    addForm()
+                  ],
+                ),
+              ),
+              //Save button widget
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Save"),
+                  onPressed: () async {
+                    setState(() async {
+                      if (_events[_controller.selectedDay] != null) {
+                        _events[_controller.selectedDay]
+                            .add(_eventController.text);
+                      } else {
+                        //Create the event and push it to the database
+                        dynamic result = await _auth.createAnEvent(
+                            _eventController.text,
+                            DateTime.now(),
+                            _controller.selectedDay);
+                        // print(_controller.selectedDay);
+
+                        _events[_controller.selectedDay] = [
+                          _eventController.text
+                        ];
+                      }
+                      _eventController.clear();
+                      Navigator.pop(context);
+                    });
+                  },
+                )
               ],
             ),
           ),

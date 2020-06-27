@@ -58,7 +58,7 @@ class DatabaseService {
     // return studentsCollection.snapshots().map(studentsCollection);
   }
 
-// get user doc stream
+  // get user doc stream
   Stream<UserData> get userData {
     return studentsCollection
         .document(uid)
@@ -67,17 +67,31 @@ class DatabaseService {
   }
 
 //Add an event
-  Future<void> addEvent(String taskName, String userEmail, DateTime postDate,
-      DateTime eventDay) async {
+  Future<void> addEvent(
+      String taskName,
+      String userEmail,
+      DateTime postDate,
+      DateTime eventDay,
+      bool completed,
+      double rating,
+      String experience) async {
     return await userAssignments.document(uid).setData({
       'taskName': taskName,
       'userEmail': userEmail,
       'postDate': postDate,
-      'eventDay': eventDay
+      'eventDay': eventDay,
+      'completed': completed,
+      'rating': rating,
+      'experience': experience
     });
   }
+  //Return current user email (Used for calendar page)
+  Future<String> returnUserEmail() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    return(user.email);
+  }
 
-//Get current user Email
+  //Get current user Email
   Future<void> getLoggedUserEmail() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     print(user.email);
