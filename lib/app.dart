@@ -107,10 +107,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: Text('Calendar'),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.notifications),
-                title: Text('Notifications'),
-              ),
-              BottomNavigationBarItem(
                 icon: Icon(Icons.star),
                 title: Text('Ratings'),
               ),
