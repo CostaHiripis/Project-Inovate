@@ -1,6 +1,7 @@
 import 'package:CheckOff/users/student.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:CheckOff/services/database.dart';
+import 'package:intl/intl.dart';
 import 'package:random_string/random_string.dart';
 
 class AuthService {
@@ -79,9 +80,11 @@ class AuthService {
     try {
       String rndString = randomString(10);
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      var formater = new DateFormat('yyyy-MM-dd');
+      String formatted = formater.format(eventDate);
 
-      await DatabaseService(uid: rndString)
-          .addEvent(taskName, user.email, postDate, eventDate, false, 0, '');
+      await DatabaseService(uid: rndString).addEvent(
+          taskName, user.email, postDate, eventDate, false, 0, '', formatted);
     } catch (err) {
       print(err.toString());
       return null;

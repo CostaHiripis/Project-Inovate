@@ -74,7 +74,8 @@ class DatabaseService {
       DateTime eventDay,
       bool completed,
       double rating,
-      String experience) async {
+      String experience,
+      String eventDayForCalendar) async {
     return await userAssignments.document(uid).setData({
       'taskName': taskName,
       'userEmail': userEmail,
@@ -82,13 +83,15 @@ class DatabaseService {
       'eventDay': eventDay,
       'completed': completed,
       'rating': rating,
-      'experience': experience
+      'experience': experience,
+      'eventDayForCalendar': eventDayForCalendar
     });
   }
+
   //Return current user email (Used for calendar page)
   Future<String> returnUserEmail() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    return(user.email);
+    return (user.email);
   }
 
   //Get current user Email
