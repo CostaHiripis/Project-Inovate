@@ -24,10 +24,11 @@ class CalendarPage extends StatefulWidget {
 
 //This is the class in which you can initialize widgets
 class _CalendarPageState extends State<CalendarPage> {
-
   final DatabaseService _dbServices = DatabaseService();
   final AuthService _auth = AuthService();
   static bool alreadyLoaded = false;
+
+  //This List stores all found tasks while conducting a getUserEvents()
   List<String> tasks = new List<String>();
 
   final _formKey = GlobalKey<FormState>();
@@ -38,32 +39,37 @@ class _CalendarPageState extends State<CalendarPage> {
 
   // This code is suppose to get all the
   Future<void> getUserEvents() async {
-    //We look for user with email that was given in login form
-    // if (alreadyLoaded == false) {
+    //We get Collection of 'userAssignments' from database
     final CollectionReference userAssignments =
         Firestore.instance.collection('userAssignments');
+
+    //We get current logged in user
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    //This is used to format a DateTime of selected day to String 'yyyy-MM-dd'
     var formater = new DateFormat('yyyy-MM-dd');
     String formatted = formater.format(_controller.selectedDay);
+
+    //We get rid off a all the unneded data from list
     tasks.clear();
-    // await formatted;
+
+    //This is a query, We loop through entire collection and we look for a document
+    // with email of logged in user and we look for a day that is
+    // equal to selected formated day (variable formatted)
+
     userAssignments
         .where("userEmail", isEqualTo: user.email)
         .where("eventDayForCalendar", isEqualTo: formatted)
         .snapshots()
         .listen((data) => data.documents.forEach((doc) {
-              DateTime eventDay = doc["eventDay"].toDate();
+              // DateTime eventDay = doc["eventDay"].toDate();
+              // String formatted = formater.format(eventDay);
 
-              //We format date to string and we get only Year,Month and day
-              String formatted = formater.format(eventDay);
+              // We get a taskName from that document and we add it to our local List tasks
               String taskName = doc["taskName"];
 
               tasks.add(taskName);
-              // _events[_controller.selectedDay].add(taskName);
-              // print('$formatted + $taskName');
             }));
-    // alreadyLoaded = true;
-    // }
   }
 
   @override
@@ -99,7 +105,6 @@ class _CalendarPageState extends State<CalendarPage> {
               initialCalendarFormat: CalendarFormat.week,
               onDaySelected: (day, events) async {
                 await getUserEvents();
-                // Timer(Duration(seconds: 5), () {});
                 setState(() {
                   _selectedEvents = events;
                 });
@@ -120,7 +125,6 @@ class _CalendarPageState extends State<CalendarPage> {
                 centerHeaderTitle: true,
               ),
             ),
-            // Column(children: tasks.map((i) => new Text(i.toString())).toList())
             Column(
                 children: tasks
                     .map((i) => new Card(
@@ -129,21 +133,6 @@ class _CalendarPageState extends State<CalendarPage> {
                           leading: Icon(Icons.assignment_turned_in),
                         )))
                     .toList())
-            // ..._selectedEvents.map((event) => SingleChildScrollView(
-            //       scrollDirection: Axis.vertical,
-            //       child: Column(
-            //         children: <Widget>[
-            //           Card(
-            //               child: ListTile(
-            //             onTap: () {},
-            //             title: Text(event),
-            //             subtitle: Text(event),
-            //             leading: Icon(Icons.assignment_turned_in),
-            //             trailing: Icon(Icons.more_vert),
-            //           ))
-            //         ],
-            //       ),
-            //     ))
           ],
         ),
       ),
@@ -191,15 +180,16 @@ class _CalendarPageState extends State<CalendarPage> {
                 if (_formKey.currentState.validate()) {
                   if (_events[_controller.selectedDay] != null) {
                     _events[_controller.selectedDay].add(_eventController.text);
-                    notificationsPage.secondsTillNotification = reminderTimeInSeconds;
-                    notificationsPage.showNotification('You got work to do', _eventController.text);
+                    notificationsPage.secondsTillNotification =
+                        reminderTimeInSeconds;
+                    notificationsPage.showNotification(
+                        'You got work to do', _eventController.text);
                   } else {
                     //Create the event and push it to the database
                     dynamic result = await _auth.createAnEvent(
                         _eventController.text,
                         DateTime.now(),
                         _controller.selectedDay);
-                    // print(_controller.selectedDay);
 
                     _events[_controller.selectedDay] = [_eventController.text];
                   }
@@ -262,23 +252,23 @@ class addCheckAndDrop extends State<addForm> {
             onChanged: (newValue) {
               setState(() {
                 _currentItem = newValue;
-                
+
                 switch (_currentItem) {
                   case '15 minutes':
-                  reminderTimeInSeconds = 900;
-                  break;
+                    reminderTimeInSeconds = 900;
+                    break;
                   case '30 minutes':
-                  reminderTimeInSeconds = 1800;
-                  break;
+                    reminderTimeInSeconds = 1800;
+                    break;
                   case '1 hour':
-                  reminderTimeInSeconds = 3600;
-                  break;
+                    reminderTimeInSeconds = 3600;
+                    break;
                   case '6 hours':
-                  reminderTimeInSeconds = 21600;
-                  break;
+                    reminderTimeInSeconds = 21600;
+                    break;
                   case '1 day':
-                  reminderTimeInSeconds = 86400;
-                  break;
+                    reminderTimeInSeconds = 86400;
+                    break;
                 }
               });
             },
