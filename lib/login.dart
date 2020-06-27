@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'package:CheckOff/services/auth.dart';
 import 'package:CheckOff/services/database.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:password/password.dart';
 import 'app.dart';
-import 'home.dart';
 import 'register.dart';
 import 'services/auth.dart';
 import 'services/database.dart';

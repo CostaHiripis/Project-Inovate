@@ -23,7 +23,6 @@ class DatabaseService {
       Firestore.instance.collection('users');
 
   String taskName = "";
-  String taskDescription = "";
   final CollectionReference userAssignments =
       Firestore.instance.collection('userAssignments');
 
@@ -52,7 +51,7 @@ class DatabaseService {
     // return studentsCollection.snapshots().map(studentsCollection);
   }
 
-// get user doc stream
+  // get user doc stream
   Stream<UserData> get userData {
     return studentsCollection
         .document(uid)
@@ -60,7 +59,7 @@ class DatabaseService {
         .map(_userDataFromSnapshot);
   }
 
-//Add an event
+  //Add an event
   Future<void> addEvent(String taskName, String userEmail, DateTime postDate,
       DateTime eventDay) async {
     return await userAssignments.document(uid).setData({
@@ -70,8 +69,13 @@ class DatabaseService {
       'eventDay': eventDay
     });
   }
+  //Return current user email (Used for calendar page)
+  Future<String> returnUserEmail() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    return(user.email);
+  }
 
-//Get current user Email
+  //Get current user Email
   Future<void> getLoggedUserEmail() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     print(user.email);

@@ -73,7 +73,7 @@ class AuthService {
     }
   }
 
-// create and event
+  // create an event
   Future createAnEvent(
       String taskName, DateTime postDate, DateTime eventDate) async {
     try {

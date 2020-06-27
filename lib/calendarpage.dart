@@ -1,11 +1,13 @@
 import 'package:CheckOff/notificationsPage.dart';
 import 'package:CheckOff/services/auth.dart';
-import 'package:CheckOff/timerpage.dart';
-import 'package:device_calendar/device_calendar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import "package:table_calendar/table_calendar.dart";
 import 'notificationsPage.dart';
+import 'package:CheckOff/services/database.dart';
+
+final DatabaseService _databaseService = DatabaseService();
+final DbSearch _dbSearch = DbSearch();
 
 //This is the root container for the entire screen, it accepts StfWidg
 class CalendarPage extends StatefulWidget {
@@ -19,34 +21,29 @@ class _CalendarPageState extends State<CalendarPage> {
 
   CalendarController _controller;
   Map<DateTime, List<dynamic>> _events;
-  Map<DateTime, List<dynamic>> _eventDescriptions;
-  Map<DateTime, List<dynamic>> _finalEventList;
   TextEditingController _eventController;
-  TextEditingController _eventDescriptionController;
   List<dynamic> _selectedEvents;
   final AuthService _auth = AuthService();
   bool reminderCheck = false;
 
   void _reminderCheckChanged(bool newValue) => setState(() {
-    reminderCheck = newValue;
+        reminderCheck = newValue;
 
-    if (reminderCheck) {
-      // TODO: enable reminders.
-    } else {
-      // TODO: disable reminders
-    }
-  });
+        if (reminderCheck) {
+          // TODO: enable reminders.
+        } else {
+          // TODO: disable reminders
+        }
+      });
 
   @override
   void initState() {
     super.initState();
     _controller = CalendarController();
     _eventController = TextEditingController();
-    _eventDescriptionController = TextEditingController();
     _selectedEvents = [];
     // _selectedEventsDescription = [];
     // _finalEventList = {..._events, ..._eventDescriptions};
-    _eventDescriptions = {};
     _events = {};
   }
 
@@ -88,22 +85,22 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             ),
             // ..._finalEventList.map((event, description) => SingleChildScrollView(
-//                   scrollDirection: Axis.vertical,
-//                   child: Column(
-//                     children: <Widget>[
-//                       Card(
-//                           child: ListTile(
-//                         onTap: () {},
-//                         title: Text(event),
-//
-//                         subtitle: Text(event),
-//
-//                         leading: Icon(Icons.assignment_turned_in),
-//                         trailing: Icon(Icons.more_vert),
-//                       ))
-//                     ],
-//                   ),
-//                 ))
+            //       scrollDirection: Axis.vertical,
+            //       child: Column(
+            //         children: <Widget>[
+            //           Card(
+            //               child: ListTile(
+            //             onTap: () {},
+            //             title: Text(event),
+
+            //             subtitle: Text(event),
+
+            //             leading: Icon(Icons.assignment_turned_in),
+            //             trailing: Icon(Icons.more_vert),
+            //           ))
+            //         ],
+            //       ),
+            //     ))
           ],
         ),
       ),
@@ -121,7 +118,8 @@ class _CalendarPageState extends State<CalendarPage> {
               title: Text("Creating new event:"),
               content: Container(
                 constraints: BoxConstraints(
-                  maxHeight: 155.0,
+                  //Alert box min height without cause conflicts with the checkbox
+                  maxHeight: 104,
                 ),
                 child: Column(
                   children: <Widget>[
@@ -129,20 +127,18 @@ class _CalendarPageState extends State<CalendarPage> {
                       decoration: InputDecoration(hintText: "Event name"),
                       controller: _eventController,
                     ),
-                    TextField(
-                      decoration:
-                          InputDecoration(hintText: "Event description"),
-                      controller: _eventDescriptionController,
-                    ),
+                    //Reminder checkbox
                     CheckboxListTile(
                       title: Text("Enable reminders"),
-                      value:reminderCheck,
+                      value: reminderCheck,
                       onChanged: _reminderCheckChanged,
-                      controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+                      controlAffinity: ListTileControlAffinity
+                          .leading, //  <-- leading Checkbox
                     ),
                   ],
                 ),
               ),
+              //Save button widget
               actions: <Widget>[
                 FlatButton(
                   child: Text("Save"),
@@ -154,28 +150,14 @@ class _CalendarPageState extends State<CalendarPage> {
                             .add(_eventController.text);
                         addNotifications(_eventController.text);
                       } else {
-                        // print(_controller.selectedDay);
+                        //Create the event and push it to the database
                         dynamic result = await _auth.createAnEvent(
-                            "this is some event blyat",
+                            _eventController.text,
                             DateTime.now(),
                             _controller.selectedDay);
+                        // print(_controller.selectedDay);
                         _events[_controller.selectedDay] = [
                           _eventController.text
-                        ];
-                      }
-                      _eventController.clear();
-                      Navigator.pop(context);
-                    });
-
-                    //Event description handler
-                    if (_eventDescriptionController.text.isEmpty) return;
-                    setState(() {
-                      if (_events[_controller.selectedDay] != null) {
-                        _events[_controller.selectedDay]
-                            .add(_eventDescriptionController.text);
-                      } else {
-                        _events[_controller.selectedDay] = [
-                          _eventDescriptionController.text
                         ];
                       }
                       _eventController.clear();
