@@ -18,9 +18,6 @@ class CalendarPage extends StatefulWidget {
 
 //This is the class in which you can initialize widgets
 class _CalendarPageState extends State<CalendarPage> {
-
-  NotificationsPage notificationsPage = new NotificationsPage();
-
   final DatabaseService _dbServices = DatabaseService();
   final AuthService _auth = AuthService();
   static bool alreadyLoaded = false;
@@ -60,41 +57,12 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void initState() {
     super.initState();
-    notificationsPage.initializing();
     _controller = CalendarController();
     _eventController = TextEditingController();
-<<<<<<< HEAD
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showAddDialog();
     });
-=======
-//    _eventDescriptionController = TextEditingController();
-
-    // This code is suppose to get all the
-    Future<void> getUserEvents() async {
-      //We look for user with email that was given in login form
-      if (alreadyLoaded == false) {
-        final CollectionReference userAssignments =
-            Firestore.instance.collection('userAssignments');
-        FirebaseUser user = await FirebaseAuth.instance.currentUser();
-
-        userAssignments
-            .where("userEmail", isEqualTo: user.email)
-            .snapshots()
-            .listen((data) => data.documents.forEach((doc) {
-                  DateTime eventDay = doc["eventDay"].toDate();
-
-                  //We format date to string and we get only Year,Month and day
-                  var formater = new DateFormat('yyyy-MM-dd');
-                  String formatted = formater.format(eventDay);
-                  String taskName = doc["taskName"];
-                  print('$formatted + $taskName');
-                }));
-        alreadyLoaded = true;
-      }
-    }
->>>>>>> 08e2ab6f4ecdd7d3e242df8e94aa20d4cab5678c
 
     _selectedEvents = [];
     _events = {};
@@ -171,7 +139,6 @@ class _CalendarPageState extends State<CalendarPage> {
 
   _showAddDialog() {
     showDialog(
-<<<<<<< HEAD
       context: context,
       builder: (context) => AlertDialog(
         title: Text("Creating new event:"),
@@ -185,25 +152,6 @@ class _CalendarPageState extends State<CalendarPage> {
               TextField(
                 decoration: InputDecoration(hintText: "Event name"),
                 controller: _eventController,
-=======
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text("Creating new event:"),
-              content: Container(
-                constraints: BoxConstraints(
-                  //Alert box min height without cause conflicts with the checkbox
-                  maxHeight: 155,
-                ),
-                child: Column(
-                  children: <Widget>[
-                    TextField(
-                      decoration: InputDecoration(hintText: "Event name"),
-                      controller: _eventController,
-                    ),
-                    addForm()
-                  ],
-                ),
->>>>>>> 08e2ab6f4ecdd7d3e242df8e94aa20d4cab5678c
               ),
               addForm()
             ],
@@ -260,14 +208,11 @@ class addCheckAndDrop extends State<addForm> {
   ];
 
   @override
-<<<<<<< HEAD
   void initState() {
     super.initState();
   }
 
   @override
-=======
->>>>>>> 08e2ab6f4ecdd7d3e242df8e94aa20d4cab5678c
   Widget build(BuildContext context) {
     return Container(
       child: Column(
