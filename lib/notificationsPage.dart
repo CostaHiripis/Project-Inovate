@@ -5,7 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationsPage {
 
-  var secondsTillNotification = 10;
+  var dateTime;
+  var timeDelayed;
+  var secondsTillNotification;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   AndroidInitializationSettings androidInitializationSettings;
   IOSInitializationSettings iosInitializationSettings;
@@ -16,7 +18,7 @@ class NotificationsPage {
   }
 
   Future<void> notification(String title, String body)async {
-    var timeDelayed = DateTime.now().add(Duration(seconds: secondsTillNotification));
+    timeDelayed = dateTime.subtract(Duration(seconds: secondsTillNotification));
     AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('Channel_ID', 'Channel title', 'channel body', priority: Priority.High, importance: Importance.Max, ticker: 'test');
     IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
     NotificationDetails notificationDetails = NotificationDetails(androidNotificationDetails, iosNotificationDetails);

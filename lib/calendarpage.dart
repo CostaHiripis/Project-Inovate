@@ -17,7 +17,7 @@ import 'notificationsPage.dart';
 
 final DatabaseService _databaseService = DatabaseService();
 NotificationsPage notificationsPage = new NotificationsPage();
-var reminderTimeInSeconds;
+int reminderTimeInSeconds;
 String taskName;
 
 //This is the root container for the entire screen, it accepts StfWidg
@@ -306,10 +306,9 @@ class _CalendarPageState extends State<CalendarPage> {
                 if (_formKey.currentState.validate()) {
                   if (_events[_controller.selectedDay] != null) {
                     _events[_controller.selectedDay].add(_eventController.text);
-                    notificationsPage.secondsTillNotification =
-                        reminderTimeInSeconds;
-                    notificationsPage.showNotification(
-                        'You got work to do', _eventController.text);
+                    notificationsPage.secondsTillNotification = reminderTimeInSeconds;
+                    notificationsPage.dateTime = _controller.selectedDay;
+                    notificationsPage.showNotification('You got work to do', _eventController.text);
                   } else {
                     //Create the event and push it to the database
                     dynamic result = await _auth.createAnEvent(
