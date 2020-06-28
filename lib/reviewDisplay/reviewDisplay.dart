@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'design_course_app_theme.dart';
+import 'package:CheckOff/calendarpage.dart';
 
 class ReviewDisplay extends StatefulWidget {
   final String passedDayOfEvent;
@@ -13,6 +14,8 @@ class ReviewDisplay extends StatefulWidget {
   final String postDate;
   final String experience;
   final double rating;
+  final String timeToComplete;
+  
 
   ReviewDisplay(
       {this.passedDayOfEvent,
@@ -22,7 +25,9 @@ class ReviewDisplay extends StatefulWidget {
       this.eventDay,
       this.postDate,
       this.experience,
-      this.rating});
+      this.rating,
+      this.timeToComplete,
+      });
   @override
   _ReviewDisplayState createState() => _ReviewDisplayState();
 }
@@ -175,7 +180,7 @@ class _ReviewDisplayState extends State<ReviewDisplay>
                               child: Row(
                                 children: <Widget>[
                                   getTimeBoxUI(this.widget.postDate, 'PostDay'),
-                                  getTimeBoxUI('2hours', 'Completed in'),
+                                  getTimeBoxUI(this.widget.timeToComplete.toString() , 'Completed in'),
                                   getTimeBoxUI(
                                       this.widget.rating.toString(), 'Rated'),
                                 ],
