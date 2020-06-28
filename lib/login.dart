@@ -35,16 +35,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-     WidgetsBinding.instance.addPostFrameCallback((_) async {
-       FirebaseUser user = await FirebaseAuth.instance.currentUser();
-       if (user != null) {
-         Navigator.pushAndRemoveUntil(
-           context,
-           MaterialPageRoute(builder: (context) => HomeScreen()),
-               (Route<dynamic> route) => false,
-         );
-       }
-     });
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      if (user != null) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+          (Route<dynamic> route) => false,
+        );
+      }
+    });
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -208,14 +208,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                     if (user == null) {
                                       setState(() {
                                         error =
-                                            'WRONG PASSWORD OR EMAIL GIVEN!!';
+                                            'WRONG PASSWORD OR \n WRONG EMAIL GIVEN!!';
                                       });
                                     } else {
                                       _dbServices.storeUserEventsInMap(email);
                                       Navigator.pushAndRemoveUntil(
                                         context,
-                                        MaterialPageRoute(builder: (context) => HomeScreen()),
-                                            (Route<dynamic> route) => false,
+                                        MaterialPageRoute(
+                                            builder: (context) => HomeScreen()),
+                                        (Route<dynamic> route) => false,
                                       );
                                     }
                                   }).catchError((e) => (error = e));
