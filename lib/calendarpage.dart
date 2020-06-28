@@ -191,13 +191,6 @@ class _CalendarPageState extends State<CalendarPage> {
                             child: ListTile(
                           title: Text(i.toString()),
                           leading: Icon(Icons.assignment_turned_in),
-                          // (() {
-                          //   if (checkIfCompleted == false) {
-                          //     Icon(Icons.nature);
-                          //   } else {
-                          //     Icon(Icons.assignment_turned_in);
-                          //   }
-                          // }()),
                           onTap: () async {
                             await checkIfAssignmentWasCompleted(i.toString());
                             Timer(Duration(seconds: 1), () async {
@@ -306,9 +299,11 @@ class _CalendarPageState extends State<CalendarPage> {
                 if (_formKey.currentState.validate()) {
                   if (_events[_controller.selectedDay] != null) {
                     _events[_controller.selectedDay].add(_eventController.text);
-                    notificationsPage.secondsTillNotification = reminderTimeInSeconds;
+                    notificationsPage.secondsTillNotification =
+                        reminderTimeInSeconds;
                     notificationsPage.dateTime = _controller.selectedDay;
-                    notificationsPage.showNotification('You got work to do', _eventController.text);
+                    notificationsPage.showNotification(
+                        'You got work to do', _eventController.text);
                   } else {
                     //Create the event and push it to the database
                     dynamic result = await _auth.createAnEvent(
