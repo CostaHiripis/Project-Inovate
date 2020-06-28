@@ -24,6 +24,7 @@ String taskName;
 class CalendarPage extends StatefulWidget {
   @override
   _CalendarPageState createState() => _CalendarPageState();
+   
 }
 
 //This is the class in which you can initialize widgets
@@ -39,6 +40,8 @@ class _CalendarPageState extends State<CalendarPage> {
   Timestamp checkedPostDate;
   Timestamp checkedEventDay;
   String checkedFormattedDay;
+  Duration completionTime;
+  String test;
 
   //Those variables plus those from above are passed to reviewDisplayPage
   String checkedExperience;
@@ -191,13 +194,6 @@ class _CalendarPageState extends State<CalendarPage> {
                             child: ListTile(
                           title: Text(i.toString()),
                           leading: Icon(Icons.assignment_turned_in),
-                          // (() {
-                          //   if (checkIfCompleted == false) {
-                          //     Icon(Icons.nature);
-                          //   } else {
-                          //     Icon(Icons.assignment_turned_in);
-                          //   }
-                          // }()),
                           onTap: () async {
                             await checkIfAssignmentWasCompleted(i.toString());
                             Timer(Duration(seconds: 1), () async {
@@ -216,6 +212,9 @@ class _CalendarPageState extends State<CalendarPage> {
                                       ),
                                       FlatButton(
                                         onPressed: () async {
+                                          completionTime = (DateTime.now().difference(checkedPostDate.toDate()));
+                                          test = completionTime.toString();
+                                          print(test);
                                           Navigator.pushAndRemoveUntil(
                                             context,
                                             MaterialPageRoute(
@@ -251,6 +250,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                             postDate: formattedPostDate,
                                             experience: checkedExperience,
                                             rating: checkedRating,
+                                            timeToComplete: test,
                                           )),
                                   (Route<dynamic> route) => true,
                                 );
@@ -306,9 +306,11 @@ class _CalendarPageState extends State<CalendarPage> {
                 if (_formKey.currentState.validate()) {
                   if (_events[_controller.selectedDay] != null) {
                     _events[_controller.selectedDay].add(_eventController.text);
-                    notificationsPage.secondsTillNotification = reminderTimeInSeconds;
+                    notificationsPage.secondsTillNotification =
+                        reminderTimeInSeconds;
                     notificationsPage.dateTime = _controller.selectedDay;
-                    notificationsPage.showNotification('You got work to do', _eventController.text);
+                    notificationsPage.showNotification(
+                        'You got work to do', _eventController.text);
                   } else {
                     //Create the event and push it to the database
                     dynamic result = await _auth.createAnEvent(
@@ -332,6 +334,11 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
     );
   }
+
+  getCompletionTime()
+  {
+    return completionTime;
+  }
 }
 
 // ignore: camel_case_types
@@ -350,6 +357,7 @@ class addCheckAndDrop extends State<addForm> {
     '6 hours',
     '1 day'
   ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -403,3 +411,4 @@ class addCheckAndDrop extends State<addForm> {
     );
   }
 }
+

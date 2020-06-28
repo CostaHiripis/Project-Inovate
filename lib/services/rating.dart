@@ -123,6 +123,7 @@ class _RatingState extends State<Rating> {
                   allowHalfRating: false,
                   spacing: 2.0,
                   onRated: (value) {
+                    this.rating = value;
                     print("rating value -> $value");
                     // print("rating value dd -> ${value.truncate()}");
                   },
