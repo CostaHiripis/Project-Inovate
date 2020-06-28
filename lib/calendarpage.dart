@@ -24,7 +24,6 @@ String taskName;
 class CalendarPage extends StatefulWidget {
   @override
   _CalendarPageState createState() => _CalendarPageState();
-   
 }
 
 //This is the class in which you can initialize widgets
@@ -40,8 +39,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Timestamp checkedPostDate;
   Timestamp checkedEventDay;
   String checkedFormattedDay;
-  Duration completionTime;
-  String test;
+  String formattedCompletionTime;
 
   //Those variables plus those from above are passed to reviewDisplayPage
   String checkedExperience;
@@ -212,9 +210,6 @@ class _CalendarPageState extends State<CalendarPage> {
                                       ),
                                       FlatButton(
                                         onPressed: () async {
-                                          completionTime = (DateTime.now().difference(checkedPostDate.toDate()));
-                                          test = completionTime.toString();
-                                          print(test);
                                           Navigator.pushAndRemoveUntil(
                                             context,
                                             MaterialPageRoute(
@@ -237,6 +232,17 @@ class _CalendarPageState extends State<CalendarPage> {
                                   ),
                                 );
                               } else {
+                                Duration completionTime;
+                                completionTime = (DateTime.now()
+                                    .difference(checkedPostDate.toDate()));
+                                format(Duration d) => d
+                                    .toString()
+                                    .split('.')
+                                    .first
+                                    .padLeft(8, "0");
+                                formattedCompletionTime =
+                                    format(completionTime);
+                                // print(test);
                                 Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
@@ -250,7 +256,8 @@ class _CalendarPageState extends State<CalendarPage> {
                                             postDate: formattedPostDate,
                                             experience: checkedExperience,
                                             rating: checkedRating,
-                                            timeToComplete: test,
+                                            timeToComplete:
+                                                formattedCompletionTime,
                                           )),
                                   (Route<dynamic> route) => true,
                                 );
@@ -308,7 +315,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     _events[_controller.selectedDay].add(_eventController.text);
                     notificationsPage.secondsTillNotification =
                         reminderTimeInSeconds;
-                    notificationsPage.dateTime = _controller.selectedDay;
+                    notificationsPage.dateTime = checkedPostDate.toDate();
                     notificationsPage.showNotification(
                         'You got work to do', _eventController.text);
                   } else {
@@ -333,11 +340,6 @@ class _CalendarPageState extends State<CalendarPage> {
         ],
       ),
     );
-  }
-
-  getCompletionTime()
-  {
-    return completionTime;
   }
 }
 
