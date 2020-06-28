@@ -15,19 +15,18 @@ class ReviewDisplay extends StatefulWidget {
   final String experience;
   final double rating;
   final String timeToComplete;
-  
 
-  ReviewDisplay(
-      {this.passedDayOfEvent,
-      this.documentID,
-      this.taskName,
-      this.userEmail,
-      this.eventDay,
-      this.postDate,
-      this.experience,
-      this.rating,
-      this.timeToComplete,
-      });
+  ReviewDisplay({
+    this.passedDayOfEvent,
+    this.documentID,
+    this.taskName,
+    this.userEmail,
+    this.eventDay,
+    this.postDate,
+    this.experience,
+    this.rating,
+    this.timeToComplete,
+  });
   @override
   _ReviewDisplayState createState() => _ReviewDisplayState();
 }
@@ -180,7 +179,9 @@ class _ReviewDisplayState extends State<ReviewDisplay>
                               child: Row(
                                 children: <Widget>[
                                   getTimeBoxUI(this.widget.postDate, 'PostDay'),
-                                  getTimeBoxUI(this.widget.timeToComplete.toString() , 'Completed in'),
+                                  getTimeBoxUI(
+                                      this.widget.timeToComplete.toString(),
+                                      'Completed in'),
                                   getTimeBoxUI(
                                       this.widget.rating.toString(), 'Rated'),
                                 ],
