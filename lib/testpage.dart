@@ -8,9 +8,7 @@ class TestPage extends StatefulWidget {
   _TestPageState createState() => _TestPageState();
 }
 
-void showNotification(){
-  
-}
+void showNotification() {}
 
 class _TestPageState extends State<TestPage> {
   @override
@@ -21,7 +19,7 @@ class _TestPageState extends State<TestPage> {
       ),
       body:
           Text("This is just an empty page for now, nothing special... yet ;)"),
-          floatingActionButton: new FloatingActionButton(
+      floatingActionButton: new FloatingActionButton(
         onPressed: showNotification,
         tooltip: 'Increment',
         child: new Icon(Icons.notifications),
@@ -29,5 +27,5 @@ class _TestPageState extends State<TestPage> {
     );
   }
 }
-//hentai 
+//hentai
 //LOL robert

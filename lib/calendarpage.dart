@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:CheckOff/login.dart';
 import 'package:CheckOff/notificationsPage.dart';
+import 'package:CheckOff/reviewDisplay/reviewDisplay.dart';
 import 'package:CheckOff/services/auth.dart';
 import 'package:CheckOff/services/database.dart';
 import 'package:CheckOff/services/rating.dart';
@@ -38,6 +39,11 @@ class _CalendarPageState extends State<CalendarPage> {
   Timestamp checkedPostDate;
   Timestamp checkedEventDay;
   String checkedFormattedDay;
+
+  //Those variables plus those from above are passed to reviewDisplayPage
+  String checkedExperience;
+  double checkedRating;
+  String formattedPostDate;
 
   //This List stores all found tasks while conducting a getUserEvents()
   List<String> tasks = new List<String>();
@@ -115,6 +121,13 @@ class _CalendarPageState extends State<CalendarPage> {
               checkedPostDate = doc['postDate'];
               checkedEventDay = doc['eventDay'];
               checkedFormattedDay = doc['eventDayForCalendar'];
+              checkedExperience = doc['experience'];
+              checkedRating = doc['rating'];
+
+              //Formated post date(We do that spc for reviewDispaly)
+              var postTimestampToDate = checkedPostDate.toDate();
+              var formater = new DateFormat('yyyy-MM-dd');
+              formattedPostDate = formater.format(postTimestampToDate);
             }));
   }
 
@@ -177,6 +190,14 @@ class _CalendarPageState extends State<CalendarPage> {
                     .map((i) => new Card(
                             child: ListTile(
                           title: Text(i.toString()),
+                          leading: Icon(Icons.assignment_turned_in),
+                          // (() {
+                          //   if (checkIfCompleted == false) {
+                          //     Icon(Icons.nature);
+                          //   } else {
+                          //     Icon(Icons.assignment_turned_in);
+                          //   }
+                          // }()),
                           onTap: () async {
                             await checkIfAssignmentWasCompleted(i.toString());
                             Timer(Duration(seconds: 1), () async {
@@ -208,7 +229,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                       eventDay: checkedEventDay,
                                                       postDate: checkedPostDate,
                                                     )),
-                                            (Route<dynamic> route) => false,
+                                            (Route<dynamic> route) => true,
                                           );
                                         },
                                         child: Text('Yes'),
@@ -220,13 +241,22 @@ class _CalendarPageState extends State<CalendarPage> {
                                 Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => TestPage()),
+                                      builder: (context) => ReviewDisplay(
+                                            passedDayOfEvent:
+                                                checkedFormattedDay,
+                                            documentID: idOfDocument,
+                                            taskName: checkedTaskName,
+                                            userEmail: checkedUserEmail,
+                                            eventDay: checkedEventDay,
+                                            postDate: formattedPostDate,
+                                            experience: checkedExperience,
+                                            rating: checkedRating,
+                                          )),
                                   (Route<dynamic> route) => true,
                                 );
                               }
                             });
                           },
-                          leading: Icon(Icons.assignment_turned_in),
                         )))
                     .toList())
           ],
