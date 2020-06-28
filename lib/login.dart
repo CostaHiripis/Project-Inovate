@@ -158,11 +158,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           SizedBox(height: 10),
                           Container(
-                              child: Text(
-                            error,
+                              child: Text(error,
                             style: TextStyle(
-                              fontSize: 25.0,
-                              color: Colors.red[50],
+                              fontSize: 20.0,
+                              color: Colors.red,
                             ),
                           ))
                         ],
@@ -208,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     if (user == null) {
                                       setState(() {
                                         error =
-                                            'WRONG PASSWORD OR \n WRONG EMAIL GIVEN!!';
+                                            'Wrong password or email!';
                                       });
                                     } else {
                                       _dbServices.storeUserEventsInMap(email);
