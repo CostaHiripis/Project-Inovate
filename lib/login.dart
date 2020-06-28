@@ -29,15 +29,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (FirebaseAuth.instance.currentUser() != null) {
-    //     Navigator.pushAndRemoveUntil(
-    //       context,
-    //       MaterialPageRoute(builder: (context) => HomeScreen()),
-    //           (Route<dynamic> route) => false,
-    //     );
-    //   }
-    // });
+     WidgetsBinding.instance.addPostFrameCallback((_) async {
+       FirebaseUser user = await FirebaseAuth.instance.currentUser();
+       if (user != null) {
+         Navigator.pushAndRemoveUntil(
+           context,
+           MaterialPageRoute(builder: (context) => HomeScreen()),
+               (Route<dynamic> route) => false,
+         );
+       }
+     });
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -187,11 +188,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   auth.handleSignInEmail(email, password)
                                       .then((FirebaseUser user) {
                                     _dbServices.storeUserEventsInMap(email);
-                                    Navigator.push(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) =>
-                                            new HomeScreen()));
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                                          (Route<dynamic> route) => false,
+                                    );
                                   }).catchError((e) => print(e));
 
                                 // if (Password.verify(
