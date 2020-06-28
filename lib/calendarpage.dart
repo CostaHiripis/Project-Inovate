@@ -86,7 +86,9 @@ class _CalendarPageState extends State<CalendarPage> {
               // We get a taskName from that document and we add it to our local List tasks
               String taskName = doc["taskName"];
 
-              tasks.add(taskName);
+              if(tasks.contains(taskName)==false) {
+                tasks.add(taskName);
+               }
               setState(() {
                 tasks = tasks;
               });
