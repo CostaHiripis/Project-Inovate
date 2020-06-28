@@ -80,6 +80,9 @@ class _CalendarPageState extends State<CalendarPage> {
               String taskName = doc["taskName"];
 
               tasks.add(taskName);
+              setState(() {
+                tasks = tasks;
+              });
             }));
   }
 
