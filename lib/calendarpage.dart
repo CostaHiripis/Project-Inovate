@@ -382,33 +382,27 @@ class addCheckAndDrop extends State<addForm> {
                 child: Text(dropDownStringItem),
               );
             }).toList(),
-            onChanged: (newValue) {
-              setState(() {
-                _currentItem = newValue;
-
-                switch (_currentItem) {
-                  case '15 minutes':
-                    reminderTimeInSeconds = 900;
-                    break;
-                  case '30 minutes':
-                    reminderTimeInSeconds = 1800;
-                    break;
-                  case '1 hour':
-                    reminderTimeInSeconds = 3600;
-                    break;
-                  case '6 hours':
-                    reminderTimeInSeconds = 21600;
-                    break;
-                  case '1 day':
-                    reminderTimeInSeconds = 86400;
-                    break;
-                }
-              });
-            },
+            onChanged: reminderCheck ? (newValue) => setState(() { _currentItem = newValue;
+            switch (_currentItem) {
+              case '15 minutes':
+                reminderTimeInSeconds = 900;
+                break;
+              case '30 minutes':
+                reminderTimeInSeconds = 1800;
+                break;
+              case '1 hour':
+                reminderTimeInSeconds = 3600;
+                break;
+              case '6 hours':
+                reminderTimeInSeconds = 21600;
+                break;
+              case '1 day':
+                reminderTimeInSeconds = 86400;
+                break;
+            }}) : null,
           ),
         ],
       ),
     );
   }
 }
-

@@ -179,10 +179,9 @@ class _ReviewDisplayState extends State<ReviewDisplay>
                               padding: const EdgeInsets.all(8),
                               child: Row(
                                 children: <Widget>[
-                                  getTimeBoxUI(this.widget.postDate, 'PostDay'),
-                                  getTimeBoxUI(this.widget.timeToComplete.toString() , 'Completed in'),
-                                  getTimeBoxUI(
-                                      this.widget.rating.toString(), 'Rated'),
+                                  getTimeBoxUI('PostDay',this.widget.postDate),
+                                  getTimeBoxUI('Completed in',this.widget.timeToComplete.toString() ),
+                                  getTimeBoxUI('Rating',this.widget.rating.toString()),
                                 ],
                               ),
                             ),
