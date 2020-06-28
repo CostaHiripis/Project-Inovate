@@ -35,15 +35,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (FirebaseAuth.instance.currentUser() != null) {
-    //     Navigator.pushAndRemoveUntil(
-    //       context,
-    //       MaterialPageRoute(builder: (context) => HomeScreen()),
-    //           (Route<dynamic> route) => false,
-    //     );
-    //   }
-    // });
+     WidgetsBinding.instance.addPostFrameCallback((_) async {
+       FirebaseUser user = await FirebaseAuth.instance.currentUser();
+       if (user != null) {
+         Navigator.pushAndRemoveUntil(
+           context,
+           MaterialPageRoute(builder: (context) => HomeScreen()),
+               (Route<dynamic> route) => false,
+         );
+       }
+     });
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -211,11 +212,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       });
                                     } else {
                                       _dbServices.storeUserEventsInMap(email);
-                                      Navigator.push(
-                                          context,
-                                          new MaterialPageRoute(
-                                              builder: (context) =>
-                                                  new HomeScreen()));
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                                            (Route<dynamic> route) => false,
+                                      );
                                     }
                                   }).catchError((e) => (error = e));
 
