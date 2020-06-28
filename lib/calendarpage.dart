@@ -317,7 +317,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     _events[_controller.selectedDay].add(_eventController.text);
                     notificationsPage.secondsTillNotification =
                         reminderTimeInSeconds;
-                    notificationsPage.dateTime = checkedPostDate.toDate();
+                    notificationsPage.dateTime = checkedEventDay.toDate();
                     notificationsPage.showNotification(
                         'You got work to do', _eventController.text);
                   } else {
